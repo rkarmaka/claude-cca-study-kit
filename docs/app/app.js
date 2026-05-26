@@ -237,30 +237,31 @@
     if (!run) return renderError();
     if (run.submitted_at) { location.hash = "#/results/" + id; return; }
     examInProgress = true;
+    if (!run.flagged) run.flagged = {};
 
-    var cards = run.questions.map(function (q, i) {
-      var opts = LETTERS.map(function (L) {
-        return '<label class="option"><input type="radio" name="q_' + q.id + '" value="' + L + '"' +
-          (run.user_answers[String(q.id)] === L ? " checked" : "") +
-          '><span class="option-letter">' + L + '</span><span class="option-text">' + md(q.options[L]) + "</span></label>";
-      }).join("");
-      return '<article class="question-card" id="q-' + (i + 1) + '"><header class="q-header">' +
-        '<span class="q-num">Question ' + (i + 1) + " of " + run.questions.length + "</span>" +
-        '<span class="q-domain">' + escapeHtml(DOMAIN_SHORT[q.domain]) + "</span></header>" +
-        '<div class="q-text">' + md(q.question) + "</div>" +
-        '<fieldset class="q-options">' + opts + "</fieldset></article>";
+    var n = run.questions.length;
+    var palette = run.questions.map(function (q, i) {
+      return '<button type="button" class="pal-btn" data-idx="' + i + '">' + (i + 1) + "</button>";
     }).join("");
 
+    // Shell is rendered once so the timer keeps running across navigation;
+    // only #question-container and the chrome update as you move between cards.
     view.innerHTML =
       '<div class="exam-header"><div><h1>Practice Exam</h1>' +
-        '<p class="muted">' + run.questions.length + " questions · " + run.duration_minutes +
-        " minutes · pass at " + run.pass_threshold + "/1000</p></div>" +
+        '<p class="muted" id="exam-progress"></p></div>' +
         '<div class="timer-container"><div id="timer" class="timer">--:--</div>' +
         '<div class="muted timer-label">time remaining</div></div></div>' +
-      '<form id="exam-form" novalidate>' + cards +
-        '<div class="exam-footer"><p class="muted">Answer all questions, then submit. ' +
+      '<div id="question-container"></div>' +
+      '<div class="exam-nav">' +
+        '<button type="button" class="btn btn-secondary btn-icon" id="prev-btn">← Previous</button>' +
+        '<span class="spacer"></span>' +
+        '<button type="button" class="btn btn-secondary" id="flag-btn">⚑ Flag</button>' +
+        '<button type="button" class="btn btn-primary btn-icon" id="next-btn">Next →</button>' +
+      "</div>" +
+      '<div class="palette" id="palette" aria-label="Question navigator">' + palette + "</div>" +
+      '<div class="exam-footer"><p class="muted">Move with Previous / Next or the numbered grid above. ' +
         "Unanswered questions are counted as incorrect.</p>" +
-        '<button type="button" class="btn btn-primary btn-lg" id="submit-btn">Submit Exam</button></div></form>' +
+        '<button type="button" class="btn btn-primary btn-lg" id="submit-btn">Submit Exam</button></div>' +
       '<dialog id="confirm-submit" class="confirm-dialog"><h3>Submit exam?</h3>' +
         '<p id="unanswered-warning" class="muted"></p>' +
         '<p class="muted">You will not be able to change answers after submitting.</p>' +
@@ -272,45 +273,89 @@
     wireExam(run);
   }
 
-  function collectAnswers(form) {
-    var answers = {};
-    form.querySelectorAll(".question-card").forEach(function (card) {
-      var checked = card.querySelector('input[type="radio"]:checked');
-      if (checked) {
-        var name = checked.name; // q_<id>
-        answers[name.slice(2)] = checked.value;
-      }
+  function countAnswered(run) {
+    var c = 0;
+    run.questions.forEach(function (q) {
+      if (run.user_answers[String(q.id)]) c++;
     });
-    return answers;
+    return c;
   }
 
   function wireExam(run) {
-    var form = document.getElementById("exam-form");
+    var n = run.questions.length;
+    var qc = document.getElementById("question-container");
     var timerEl = document.getElementById("timer");
+    var progressEl = document.getElementById("exam-progress");
+    var prevBtn = document.getElementById("prev-btn");
+    var nextBtn = document.getElementById("next-btn");
+    var flagBtn = document.getElementById("flag-btn");
     var dialog = document.getElementById("confirm-submit");
     var expiredDialog = document.getElementById("expired-dialog");
     var warningEl = document.getElementById("unanswered-warning");
+    var palBtns = Array.prototype.slice.call(view.querySelectorAll(".pal-btn"));
     var expiresAt = new Date(run.expires_at);
-    var autoSubmitted = false, submitting = false;
+    var idx = 0, autoSubmitted = false, submitting = false;
 
-    // Persist answers as the user goes, so a refresh/resume keeps them.
-    form.addEventListener("change", function () {
-      run.user_answers = collectAnswers(form);
+    function renderQuestion() {
+      var q = run.questions[idx];
+      var sel = run.user_answers[String(q.id)];
+      var opts = LETTERS.map(function (L) {
+        return '<label class="option"><input type="radio" name="q_' + q.id + '" value="' + L + '"' +
+          (sel === L ? " checked" : "") + '><span class="option-letter">' + L +
+          '</span><span class="option-text">' + md(q.options[L]) + "</span></label>";
+      }).join("");
+      qc.innerHTML =
+        '<article class="question-card"><header class="q-header">' +
+        '<span class="q-num">Question ' + (idx + 1) + " of " + n + "</span>" +
+        '<span class="q-domain">' + escapeHtml(DOMAIN_SHORT[q.domain]) + "</span></header>" +
+        '<div class="q-text">' + md(q.question) + "</div>" +
+        '<fieldset class="q-options">' + opts + "</fieldset></article>";
+      qc.querySelectorAll('input[type="radio"]').forEach(function (r) {
+        r.addEventListener("change", function () {
+          run.user_answers[String(q.id)] = r.value;
+          saveRun(run);
+          updateChrome();
+        });
+      });
+      updateChrome();
+      window.scrollTo(0, 0);
+    }
+
+    function updateChrome() {
+      var q = run.questions[idx];
+      progressEl.textContent = "Question " + (idx + 1) + " of " + n +
+        " · " + countAnswered(run) + " answered";
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === n - 1;
+      var flagged = !!run.flagged[String(q.id)];
+      flagBtn.classList.toggle("flag-on", flagged);
+      flagBtn.textContent = flagged ? "⚑ Flagged" : "⚑ Flag";
+      palBtns.forEach(function (b, i) {
+        var qq = run.questions[i];
+        b.classList.toggle("answered", !!run.user_answers[String(qq.id)]);
+        b.classList.toggle("flagged", !!run.flagged[String(qq.id)]);
+        b.classList.toggle("current", i === idx);
+      });
+    }
+
+    function goTo(i) { idx = Math.max(0, Math.min(n - 1, i)); renderQuestion(); }
+
+    prevBtn.addEventListener("click", function () { goTo(idx - 1); });
+    nextBtn.addEventListener("click", function () { goTo(idx + 1); });
+    flagBtn.addEventListener("click", function () {
+      var key = String(run.questions[idx].id);
+      if (run.flagged[key]) delete run.flagged[key]; else run.flagged[key] = true;
       saveRun(run);
+      updateChrome();
+    });
+    palBtns.forEach(function (b) {
+      b.addEventListener("click", function () { goTo(parseInt(b.dataset.idx, 10)); });
     });
 
     function doSubmit() {
       if (submitting) return;
       submitting = true; examInProgress = false;
-      submitExam(run, collectAnswers(form));
-    }
-
-    function countUnanswered() {
-      var u = 0;
-      form.querySelectorAll(".question-card").forEach(function (card) {
-        if (!card.querySelector('input[type="radio"]:checked')) u++;
-      });
-      return u;
+      submitExam(run, run.user_answers);
     }
 
     function tick() {
@@ -330,15 +375,17 @@
     activeTimer = setInterval(tick, 1000);
 
     document.getElementById("submit-btn").addEventListener("click", function () {
-      var u = countUnanswered(), total = run.questions.length;
+      var u = n - countAnswered(run);
       warningEl.textContent = u > 0
-        ? (u + " of " + total + " unanswered — counted as incorrect.")
-        : ("All " + total + " questions answered.");
+        ? (u + " of " + n + " unanswered — counted as incorrect.")
+        : ("All " + n + " questions answered.");
       if (dialog && dialog.showModal) dialog.showModal();
       else if (confirm("Submit? " + u + " unanswered.")) doSubmit();
     });
     document.getElementById("cancel-submit").addEventListener("click", function () { dialog.close(); });
     document.getElementById("confirm-submit-btn").addEventListener("click", doSubmit);
+
+    renderQuestion();
   }
 
   function renderResults(id) {
