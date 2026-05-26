@@ -215,6 +215,10 @@
             return '<button type="button" class="grade-btn ' + g.k + '" data-grade="' + g.k + '">' +
               g.label + "</button>";
           }).join("") +
+        "</div>" +
+        '<div class="fc-controls" style="margin-top:0.6rem">' +
+          '<span class="spacer"></span>' +
+          '<button type="button" class="btn btn-secondary btn-icon" id="reveal-btn">Hide answer</button>' +
         "</div>"
       : '<div class="fc-controls">' +
           '<button type="button" class="btn btn-secondary btn-icon" id="prev-btn"' + (i === 0 ? " disabled" : "") + ">← Previous</button>" +
@@ -268,7 +272,7 @@
     if (sh) sh.addEventListener("click", function (e) { e.preventDefault(); startSession(session.key, true); });
   }
 
-  function doReveal() { session.revealed = true; renderCard(); }
+  function doReveal() { session.revealed = !session.revealed; renderCard(); }
   function doNext() { session.index++; session.revealed = false; renderCard(); }
   function doPrev() {
     if (session.index > 0) { session.index--; session.revealed = false; renderCard(); }
