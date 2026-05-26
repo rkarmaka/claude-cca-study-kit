@@ -726,3 +726,7 @@ h2 {
 /* Locked (not-yet-reached) palette buttons — no skipping ahead */
 .pal-btn.locked { opacity: 0.38; cursor: not-allowed; }
 .pal-btn.locked:hover { border-color: var(--border-strong); color: var(--text-muted); }
+
+/* --- Shared display serif (loaded via Google Fonts on each page) --- */
+:root { --font-serif: "Fraunces", Georgia, "Times New Roman", serif; }
+.hero h1 { font-family: var(--font-serif); letter-spacing: -0.015em; }

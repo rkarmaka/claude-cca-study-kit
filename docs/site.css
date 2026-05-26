@@ -1,0 +1,199 @@
+/* Landing page — layered on the shared app theme (app/style.css). */
+
+.lp-wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* Header nav tweaks (reuses .site-header from app/style.css) */
+.site-nav a.is-cta {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* --- Hero --- */
+.lp-hero {
+  position: relative;
+  background:
+    radial-gradient(1100px 460px at 82% -12%, var(--accent-soft), transparent 62%),
+    radial-gradient(760px 420px at 8% 0%, rgba(74, 124, 89, 0.06), transparent 60%),
+    var(--bg);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.lp-hero-inner { padding: 4.5rem 1.5rem 3.5rem; max-width: 880px; margin: 0 auto; }
+
+.lp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid rgba(201, 99, 66, 0.25);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+}
+
+.lp-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2.3rem, 5.2vw, 3.7rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  margin: 1.1rem 0 0;
+}
+.lp-title .accent { color: var(--accent); }
+
+.lp-lede {
+  font-size: 1.18rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 40rem;
+  margin: 1.15rem 0 0;
+}
+
+.lp-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.9rem; }
+
+.lp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem;
+  margin-top: 3rem;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--border);
+}
+.lp-stats div { display: flex; flex-direction: column; }
+.lp-stats b {
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1;
+}
+.lp-stats span { font-size: 0.86rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+/* --- Sections --- */
+.lp-section { padding: 3.25rem 1.5rem 0; }
+.lp-section:last-of-type { padding-bottom: 1rem; }
+.lp-h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.35rem;
+}
+.lp-sub { color: var(--text-muted); margin: 0 0 1.4rem; }
+
+/* --- How it works --- */
+.lp-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+.lp-step {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.4rem 1.5rem;
+}
+.lp-step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem; height: 2rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.7rem;
+}
+.lp-step h3 { margin: 0 0 0.3rem; font-size: 1.05rem; }
+.lp-step p { margin: 0; color: var(--text-muted); font-size: 0.92rem; }
+.lp-step a { font-weight: 600; }
+
+/* --- Content directory --- */
+.lp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.lp-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.2rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.lp-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(20, 20, 19, 0.07);
+  text-decoration: none;
+}
+.lp-card.feature { background: linear-gradient(180deg, var(--accent-soft), var(--card-bg) 70%); border-color: rgba(201, 99, 66, 0.3); }
+.lp-ic {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem; height: 2.4rem;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.lp-ic svg { width: 1.3rem; height: 1.3rem; }
+.lp-card-title { display: block; font-weight: 600; margin-bottom: 0.2rem; }
+.lp-card-desc { display: block; color: var(--text-muted); font-size: 0.88rem; line-height: 1.45; }
+
+/* --- Blueprint bars --- */
+.lp-blueprint { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.5rem 0 1rem; max-width: 720px; }
+.lp-bp-row { display: grid; grid-template-columns: 1fr; gap: 0.3rem; }
+.lp-bp-head { display: flex; justify-content: space-between; align-items: baseline; }
+.lp-bp-name { font-size: 0.92rem; }
+.lp-bp-pct { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+.lp-bp-track { height: 8px; background: var(--bg-sunken); border-radius: 999px; overflow: hidden; }
+.lp-bp-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+
+/* --- Disclaimer callout --- */
+.lp-note {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+.lp-note strong { color: var(--text); }
+
+/* --- Footer --- */
+.lp-footer {
+  margin-top: 3.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--card-bg);
+}
+.lp-footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+.lp-footer a { color: var(--accent); }
+
+@media (max-width: 560px) {
+  .lp-hero-inner { padding: 3rem 1.5rem 2.5rem; }
+  .lp-stats { gap: 1.5rem; }
+}
