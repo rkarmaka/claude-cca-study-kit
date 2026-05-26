@@ -7,6 +7,7 @@
   color: var(--accent);
   font-weight: 600;
 }
+.site-nav a.is-active:not(.is-cta) { color: var(--text); font-weight: 600; }
 
 /* --- Hero --- */
 .lp-hero {
@@ -67,7 +68,7 @@
 .lp-stats div { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .lp-stats b {
   font-family: var(--font-serif);
-  font-size: 1.9rem;
+  font-size: clamp(2.2rem, 4.5vw, 2.9rem);
   font-weight: 500;
   color: var(--text);
   line-height: 1;
@@ -84,37 +85,6 @@
   letter-spacing: -0.01em;
   margin: 0 0 0.35rem;
 }
-.lp-sub { color: var(--text-muted); margin: 0 0 1.4rem; }
-
-/* --- How it works --- */
-.lp-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 1.25rem;
-  margin-top: 0.5rem;
-}
-.lp-step {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.4rem 1.4rem 1.5rem;
-}
-.lp-step-n {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem; height: 2rem;
-  border-radius: 50%;
-  background: var(--accent-soft);
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 0.7rem;
-}
-.lp-step h3 { margin: 0 0 0.3rem; font-size: 1.05rem; }
-.lp-step p { margin: 0; color: var(--text-muted); font-size: 0.92rem; }
-.lp-step a { font-weight: 600; }
-
 /* --- Content directory --- */
 .lp-grid {
   display: grid;
@@ -140,7 +110,6 @@
   box-shadow: 0 6px 20px rgba(20, 20, 19, 0.07);
   text-decoration: none;
 }
-.lp-card.feature { background: linear-gradient(180deg, var(--accent-soft), var(--card-bg) 70%); border-color: rgba(201, 99, 66, 0.3); }
 .lp-ic {
   flex: none;
   display: inline-flex;
@@ -162,20 +131,8 @@
 .lp-bp-name { font-size: 0.92rem; }
 .lp-bp-pct { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; font-size: 0.9rem; }
 .lp-bp-track { height: 7px; background: var(--bg-sunken); border-radius: 999px; overflow: hidden; }
-.lp-bp-fill { height: 100%; background: var(--accent); border-radius: 999px; }
-
-/* --- Disclaimer callout --- */
-.lp-note {
-  background: var(--bg-sunken);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.15rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-top: 1rem;
-}
-.lp-note strong { color: var(--text); }
+.lp-bp-fill { height: 100%; width: 0; background: var(--accent); border-radius: 999px; transition: width 0.9s cubic-bezier(0.22, 0.8, 0.26, 1); }
+@media (prefers-reduced-motion: reduce) { .lp-bp-fill { transition: none; } }
 
 /* --- Footer --- */
 .lp-footer {
@@ -201,33 +158,6 @@
   .lp-hero-inner { padding: 3rem 1.5rem 2.5rem; }
   .lp-stats { gap: 1.5rem; }
 }
-
-/* --- About: two-column intro + centered fact tiles --- */
-.lp-about-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
-  gap: 1.75rem;
-  align-items: start;
-}
-.lp-about-text { max-width: 62ch; font-size: 1.05rem; line-height: 1.65; margin: 0; }
-.lp-inline-note {
-  display: flex; flex-direction: column; gap: 0.35rem;
-  margin: 1.1rem 0 0; padding-left: 0.9rem;
-  border-left: 3px solid var(--border-strong);
-  font-size: 0.9rem; color: var(--text-muted);
-}
-.lp-inline-note strong { color: var(--text); }
-.lp-side-card {
-  background: var(--bg-sunken);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.1rem 1.2rem;
-  font-size: 0.88rem; color: var(--text-muted);
-}
-.lp-side-card p { margin: 0 0 0.45rem; }
-.lp-side-card p:last-child { margin-bottom: 0; }
-.lp-side-card a { color: var(--accent); }
-@media (max-width: 720px) { .lp-about-grid { grid-template-columns: 1fr; } }
 
 .lp-facts {
   display: grid;
@@ -256,7 +186,7 @@
 /* --- Recommended path: compact stepper --- */
 .lp-stepper {
   list-style: none; padding: 0; margin: 0.5rem 0 0;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
   gap: 0.7rem 1.75rem;
 }
 .lp-stepper li { display: flex; align-items: flex-start; gap: 0.7rem; font-size: 0.94rem; }
@@ -277,10 +207,6 @@
 .lp-grid.compact .lp-card-title { margin-bottom: 0.1rem; }
 .lp-grid.compact .lp-card-desc { font-size: 0.84rem; line-height: 1.4; }
 
-/* --- Merged resources/about footing --- */
-.lp-about-line { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin: 1.5rem 0 0.75rem; }
-.lp-about-line a { color: var(--accent); }
-
 /* Sub-heading inside a section */
 .lp-h3 {
   font-size: 0.8rem;
@@ -291,38 +217,6 @@
   margin: 1.75rem 0 0.9rem;
 }
 
-/* --- Resources: compact icon links --- */
-.lp-resource-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
-  gap: 0.8rem;
-}
-.lp-resource {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.7rem 0.85rem;
-  color: inherit;
-  text-decoration: none;
-  transition: border-color 0.15s, background 0.15s, transform 0.15s;
-}
-.lp-resource:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  transform: translateY(-1px);
-  text-decoration: none;
-}
-.lp-resource .lp-ic { width: 2rem; height: 2rem; border-radius: 7px; }
-.lp-resource .lp-ic svg { width: 1.1rem; height: 1.1rem; }
-.lp-resource .r-text { display: flex; flex-direction: column; min-width: 0; }
-.lp-resource .r-title { font-weight: 600; font-size: 0.9rem; }
-.lp-resource .r-sub { color: var(--text-faint); font-size: 0.74rem; }
-.lp-resource .r-ext { margin-left: auto; color: var(--text-faint); flex: none; }
-.lp-resource .r-ext svg { width: 0.85rem; height: 0.85rem; display: block; }
-
 /* --- Hero disclaimer + verified labels --- */
 .lp-disclaimer {
   margin: 1rem 0 0;
@@ -332,39 +226,6 @@
   max-width: 40rem;
 }
 .lp-disclaimer strong { color: var(--text); }
-.lp-verified {
-  font-size: 0.84rem;
-  color: var(--text-faint);
-  margin: 0.5rem 0 0;
-}
-.lp-verified a { color: var(--accent); }
-
-/* --- Who it's for --- */
-.lp-who {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-  margin-top: 1.75rem;
-}
-.lp-who-col {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.1rem 1.2rem;
-}
-.lp-who-col.good { border-left: 3px solid var(--pass); }
-.lp-who-col.bad { border-left: 3px solid var(--fail); }
-.lp-who-h {
-  display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-}
-.lp-who-col.good .lp-who-h { color: var(--pass); }
-.lp-who-col.bad .lp-who-h { color: var(--fail); }
-.lp-who-col p { margin: 0; font-size: 0.92rem; color: var(--text-muted); }
 
 /* --- Responsive header nav --- */
 @media (max-width: 560px) {
@@ -380,26 +241,6 @@
 @media (max-width: 720px) {
   .lp-grid.row3, .lp-grid.row2 { grid-template-columns: 1fr; }
 }
-
-/* --- Resources as pill links (distinct from the card grids) --- */
-.lp-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.5rem; }
-.lp-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--card-bg);
-  color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: border-color 0.12s, background 0.12s, color 0.12s;
-}
-.lp-link:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); text-decoration: none; }
-.lp-link-ic { width: 1.05rem; height: 1.05rem; color: var(--accent); flex: none; }
-.lp-link-ext { width: 0.78rem; height: 0.78rem; color: var(--text-faint); flex: none; }
-.lp-link:hover .lp-link-ext { color: var(--accent); }
 
 /* --- About: wide prose, slim band, quiet source --- */
 .lp-prose { max-width: 980px; font-size: 1.05rem; line-height: 1.65; margin: 0; }
@@ -421,7 +262,7 @@
 /* --- Study references: light list, not cards --- */
 .lp-list {
   list-style: none; padding: 0; margin: 0.25rem 0 0;
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 2rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 0 2rem;
 }
 .lp-list li { border-top: 1px solid var(--border); }
 .lp-list a {

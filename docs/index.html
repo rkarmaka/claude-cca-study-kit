@@ -5,13 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CCA Foundations — Study Kit &amp; Practice Exam</title>
 <meta name="description" content="A free, open community study kit for the Claude Certified Architect (CCA) — Foundations exam: notes, flashcards, a 220-question bank, and a timed mock exam." />
+<link rel="canonical" href="https://rkarmaka.github.io/claude-cca-study-kit/" />
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1b1916" media="(prefers-color-scheme: dark)" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="CCA Foundations Study Kit" />
+<meta property="og:title" content="CCA Foundations — Study Kit &amp; Practice Exam" />
+<meta property="og:description" content="A free, unofficial prep kit for the Claude Certified Architect — Foundations exam: domain notes, flashcards, a 220-question bank, and a timed mock exam." />
+<meta property="og:url" content="https://rkarmaka.github.io/claude-cca-study-kit/" />
+<meta property="og:image" content="https://rkarmaka.github.io/claude-cca-study-kit/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CCA Foundations — Study Kit &amp; Practice Exam" />
+<meta name="twitter:description" content="A free, unofficial prep kit for the Claude Certified Architect — Foundations exam: notes, flashcards, a 220-question bank, and a timed mock exam." />
+<meta name="twitter:image" content="https://rkarmaka.github.io/claude-cca-study-kit/og-image.png" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app/style.css">
+<link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
+
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- icon sprite -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -63,7 +84,7 @@
   </div>
 </section>
 
-<main>
+<main id="main">
   <!-- About the exam -->
   <section class="lp-wrap lp-section" id="about">
     <h2 class="lp-h2">About the exam</h2>
@@ -90,6 +111,15 @@
 
     <h3 class="lp-h3">Score weight by domain</h3>
     <div class="lp-blueprint" id="blueprint"></div>
+    <noscript>
+      <ul class="lp-prose" style="margin:0;padding-left:1.1rem">
+        <li>Agentic Architecture &amp; Orchestration — 27%</li>
+        <li>Tool Design &amp; MCP Integration — 18%</li>
+        <li>Claude Code Configuration &amp; Workflows — 20%</li>
+        <li>Prompt Engineering &amp; Structured Output — 20%</li>
+        <li>Context Management &amp; Reliability — 15%</li>
+      </ul>
+    </noscript>
   </section>
 
   <!-- Recommended path -->
@@ -112,17 +142,17 @@
     <h3 class="lp-h3">Practice</h3>
     <div class="lp-grid compact row3">
       <a class="lp-card" href="app/">
-        <span class="lp-ic"><svg><use href="#ic-clock"/></svg></span>
+        <span class="lp-ic"><svg aria-hidden="true" focusable="false"><use href="#ic-clock"/></svg></span>
         <span><span class="lp-card-title">Timed mock exam</span>
           <span class="lp-card-desc">Diagnostic, domain drill, or full 60-question mock.</span></span>
       </a>
       <a class="lp-card" href="flashcards/">
-        <span class="lp-ic"><svg><use href="#ic-cards"/></svg></span>
+        <span class="lp-ic"><svg aria-hidden="true" focusable="false"><use href="#ic-cards"/></svg></span>
         <span><span class="lp-card-title">Flashcards</span>
           <span class="lp-card-desc">111 cards with spaced-repetition grading + Anki export.</span></span>
       </a>
       <a class="lp-card" href="practice-exam.html">
-        <span class="lp-ic"><svg><use href="#ic-doc"/></svg></span>
+        <span class="lp-ic"><svg aria-hidden="true" focusable="false"><use href="#ic-doc"/></svg></span>
         <span><span class="lp-card-title">Static practice exam</span>
           <span class="lp-card-desc">A fixed 60-question set for printing or offline.</span></span>
       </a>
@@ -130,11 +160,11 @@
 
     <h3 class="lp-h3">Study references</h3>
     <ul class="lp-list">
-      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/STUDY-GUIDE.md" target="_blank" rel="noopener"><svg class="li-ic"><use href="#ic-compass"/></svg><span class="t">Study guide</span><span class="d">how to use everything, with a two-week plan</span></a></li>
-      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes" target="_blank" rel="noopener"><svg class="li-ic"><use href="#ic-layers"/></svg><span class="t">Domain cheatsheets</span><span class="d">decision-rule notes for all five domains</span></a></li>
-      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/scenario-guide.md" target="_blank" rel="noopener"><svg class="li-ic"><use href="#ic-grid"/></svg><span class="t">Scenario guide</span><span class="d">the 6 scenarios mapped to domains</span></a></li>
-      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md" target="_blank" rel="noopener"><svg class="li-ic"><use href="#ic-alert"/></svg><span class="t">Master trap sheet</span><span class="d">every distractor pattern on one page</span></a></li>
-      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/glossary.md" target="_blank" rel="noopener"><svg class="li-ic"><use href="#ic-book"/></svg><span class="t">Glossary</span><span class="d">key terms, flags, paths, and APIs</span></a></li>
+      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/STUDY-GUIDE.md" target="_blank" rel="noopener"><svg class="li-ic" aria-hidden="true" focusable="false"><use href="#ic-compass"/></svg><span class="t">Study guide</span><span class="d">how to use everything, with a two-week plan</span></a></li>
+      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes" target="_blank" rel="noopener"><svg class="li-ic" aria-hidden="true" focusable="false"><use href="#ic-layers"/></svg><span class="t">Domain cheatsheets</span><span class="d">decision-rule notes for all five domains</span></a></li>
+      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/scenario-guide.md" target="_blank" rel="noopener"><svg class="li-ic" aria-hidden="true" focusable="false"><use href="#ic-grid"/></svg><span class="t">Scenario guide</span><span class="d">the 6 scenarios mapped to domains</span></a></li>
+      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md" target="_blank" rel="noopener"><svg class="li-ic" aria-hidden="true" focusable="false"><use href="#ic-alert"/></svg><span class="t">Master trap sheet</span><span class="d">every distractor pattern on one page</span></a></li>
+      <li><a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/glossary.md" target="_blank" rel="noopener"><svg class="li-ic" aria-hidden="true" focusable="false"><use href="#ic-book"/></svg><span class="t">Glossary</span><span class="d">key terms, flags, paths, and APIs</span></a></li>
     </ul>
   </section>
 
@@ -179,13 +209,41 @@
       ["Context Management & Reliability", 15],
     ];
     var max = 27;
-    document.getElementById("blueprint").innerHTML = domains.map(function (d) {
+    var bp = document.getElementById("blueprint");
+    bp.innerHTML = domains.map(function (d) {
       return '<div class="lp-bp-row"><div class="lp-bp-head">' +
         '<span class="lp-bp-name">' + d[0] + '</span>' +
         '<span class="lp-bp-pct">' + d[1] + '%</span></div>' +
-        '<div class="lp-bp-track"><div class="lp-bp-fill" style="width:' +
-        Math.round(d[1] / max * 100) + '%"></div></div></div>';
+        '<div class="lp-bp-track"><div class="lp-bp-fill" data-w="' +
+        Math.round(d[1] / max * 100) + '"></div></div></div>';
     }).join("");
+
+    // Animate the bars in when the blueprint scrolls into view.
+    var fills = bp.querySelectorAll(".lp-bp-fill");
+    function fillBars() { fills.forEach(function (el) { el.style.width = el.getAttribute("data-w") + "%"; }); }
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (e) { if (e.isIntersecting) { fillBars(); obs.disconnect(); } });
+      }, { threshold: 0.3 });
+      io.observe(bp);
+    } else { fillBars(); }
+
+    // Scroll-spy: highlight the section the reader is currently in.
+    var links = {};
+    document.querySelectorAll('.site-nav a[href^="#"]').forEach(function (a) {
+      links[a.getAttribute("href").slice(1)] = a;
+    });
+    var ids = Object.keys(links);
+    if (ids.length && "IntersectionObserver" in window) {
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            ids.forEach(function (id) { links[id].classList.toggle("is-active", id === e.target.id); });
+          }
+        });
+      }, { rootMargin: "-45% 0px -50% 0px" });
+      ids.forEach(function (id) { var s = document.getElementById(id); if (s) spy.observe(s); });
+    }
   })();
 </script>
 </body>
