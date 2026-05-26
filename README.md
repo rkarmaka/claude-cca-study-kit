@@ -53,11 +53,15 @@ Each run samples 60 questions weighted by domain, enforces a 120-minute timer,
 and reports a scaled score (pass at 720/1000) with a per-domain breakdown and
 full answer review. See [`exam-app/README.md`](./exam-app/README.md) for details.
 
-## Flashcards (Anki)
+## Flashcards (web + Anki)
 
-A pre-built 111-card deck is at [`anki/cca-flashcards.txt`](./anki/cca-flashcards.txt),
-tagged by domain (`CCA::D1`–`CCA::D5`). Import it into Anki, or regenerate it from
-`flashcards.md` with `python3 anki/build_anki.py`. See [`anki/README.md`](./anki/README.md).
+Study the 111 cards in the browser — by domain or all at once, one at a time, in
+order or shuffled — in the [flashcards app](./docs/flashcards/) (also hosted on the
+Pages site). A pre-built Anki deck is at
+[`anki/cca-flashcards.txt`](./anki/cca-flashcards.txt), tagged by domain
+(`CCA::D1`–`CCA::D5`) and downloadable from inside the app. `python3 anki/build_anki.py`
+regenerates the deck **and** the app's data from `flashcards.md` (one source of
+truth). See [`anki/README.md`](./anki/README.md).
 
 ## Run the practice exam in a browser (GitHub Pages)
 

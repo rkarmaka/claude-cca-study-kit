@@ -110,11 +110,32 @@ def md_block_to_html(block: str) -> str:
     return "".join(out)
 
 
+# Human-readable deck labels, keyed by the deck slug emitted below.
+DECK_LABELS = {
+    "D1": "Agentic Architecture & Orchestration",
+    "D2": "Tool Design & MCP Integration",
+    "D3": "Claude Code Configuration & Workflows",
+    "D4": "Prompt Engineering & Structured Output",
+    "D5": "Context Management & Reliability",
+    "Traps": "Repeat-mistake traps",
+}
+
+# Web app data + downloadable deck copy, served by docs/flashcards/.
+WEB_DIR = HERE.parent / "docs" / "flashcards"
+WEB_JSON = WEB_DIR / "cards.json"
+WEB_DECK = WEB_DIR / "cca-flashcards.txt"
+
+
+def deck_key(heading: str) -> str:
+    """Group a card into a deck: a domain (`D1`–`D5`) or the repeat-mistake `Traps`."""
+    m = re.match(r"^D([1-5])\b", heading)
+    return f"D{m.group(1)}" if m else "Traps"
+
+
 def card_tag(heading: str, fallback: str) -> str:
     """Tag a card by its domain marker (`D1 · ...`) or fall back to the source tag."""
-    m = re.match(r"^D([1-5])\b", heading)
-    if m:
-        return f"CCA::D{m.group(1)}"
+    if re.match(r"^D([1-5])\b", heading):
+        return f"CCA::{deck_key(heading)}"
     # Otherwise derive from the title (strip emoji and "Card N —").
     title = re.sub(r"[🔴🟡🟢🔁🎯📌❌]", "", heading).strip()
     title = re.sub(r"^Card\s+\d+\s*[—-]\s*", "", title).strip()
@@ -122,11 +143,11 @@ def card_tag(heading: str, fallback: str) -> str:
     return f"{fallback}::{slug}" if slug else fallback
 
 
-def parse_cards(md: str, fallback_tag: str) -> list[tuple[str, str, str]]:
-    """Return (front_html, back_html, tags) for every FRONT/BACK section."""
+def parse_cards(md: str, fallback_tag: str) -> list[dict]:
+    """Return {front, back, tag, deck} for every FRONT/BACK section."""
     # Split into sections on level-2 headings, keeping the heading text.
     parts = re.split(r"^##\s+", md, flags=re.MULTILINE)
-    cards: list[tuple[str, str, str]] = []
+    cards: list[dict] = []
 
     for part in parts[1:]:
         heading, _, body = part.partition("\n")
@@ -138,29 +159,57 @@ def parse_cards(md: str, fallback_tag: str) -> list[tuple[str, str, str]]:
         # Trim trailing horizontal rule / next-section bleed.
         back_raw = re.split(r"^---\s*$", back_raw, flags=re.MULTILINE)[0]
 
-        front = md_block_to_html(front_raw.strip())
-        back = md_block_to_html(back_raw.strip())
-        cards.append((front, back, card_tag(heading, fallback_tag)))
+        cards.append({
+            "front": md_block_to_html(front_raw.strip()),
+            "back": md_block_to_html(back_raw.strip()),
+            "tag": card_tag(heading, fallback_tag),
+            "deck": deck_key(heading),
+        })
     return cards
 
 
 def main() -> None:
+    import json
+
     lines = ["#separator:tab", "#html:true", "#columns:Front\tBack\tTags"]
-    total = 0
+    all_cards: list[dict] = []
     for path, fallback in SOURCES:
         if not path.exists():
             print(f"  (skipped missing {path.name})")
             continue
         cards = parse_cards(path.read_text(encoding="utf-8"), fallback)
-        total += len(cards)
+        all_cards.extend(cards)
         print(f"  {len(cards):>3} cards <- {path.name}")
-        for front, back, tag in cards:
+        for c in cards:
             # Tabs/newlines would break the TSV row; cards have neither after HTML.
-            row = "\t".join(c.replace("\t", " ").replace("\n", " ")
-                            for c in (front, back, tag))
+            row = "\t".join(v.replace("\t", " ").replace("\n", " ")
+                            for v in (c["front"], c["back"], c["tag"]))
             lines.append(row)
-    OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"Wrote {total} cards -> {OUT.relative_to(HERE.parent)}")
+
+    deck_text = "\n".join(lines) + "\n"
+    OUT.write_text(deck_text, encoding="utf-8")
+    print(f"Wrote {len(all_cards)} cards -> {OUT.relative_to(HERE.parent)}")
+
+    # Web app: cards.json + a downloadable copy of the Anki deck.
+    if WEB_DIR.exists():
+        decks = [
+            {"key": k, "label": DECK_LABELS.get(k, k),
+             "count": sum(1 for c in all_cards if c["deck"] == k)}
+            for k in ["D1", "D2", "D3", "D4", "D5", "Traps"]
+            if any(c["deck"] == k for c in all_cards)
+        ]
+        payload = {
+            "total": len(all_cards),
+            "decks": decks,
+            "cards": [{"front": c["front"], "back": c["back"], "deck": c["deck"]}
+                      for c in all_cards],
+        }
+        WEB_JSON.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        WEB_DECK.write_text(deck_text, encoding="utf-8")
+        print(f"Wrote web data -> {WEB_JSON.relative_to(HERE.parent)} "
+              f"(+ downloadable deck)")
+    else:
+        print(f"  (skipped web data: {WEB_DIR} does not exist yet)")
 
 
 if __name__ == "__main__":

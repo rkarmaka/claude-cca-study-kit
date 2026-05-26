@@ -1,0 +1,119 @@
+/* Flashcards — layered on top of the shared app theme (../app/style.css). */
+
+/* Deck picker grid */
+.deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.deck-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.deck-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.deck-card .deck-name { font-weight: 600; }
+.deck-card .deck-count { color: var(--text-muted); font-size: 0.88rem; }
+.deck-card.all { border-color: var(--border-strong); background: var(--bg-sunken); }
+
+.picker-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+.picker-options .label { color: var(--text-muted); font-size: 0.9rem; }
+
+/* Study view */
+.study-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.study-bar .deck-title { font-weight: 600; }
+.progress-text { color: var(--text-muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+
+.progress-track {
+  height: 4px;
+  background: var(--bg-sunken);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+/* The card itself */
+.flashcard {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+}
+.flashcard .fc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.fc-side { color: var(--text-faint); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.fc-front { font-size: 1.18rem; line-height: 1.5; }
+.fc-front strong { font-weight: 600; }
+
+.fc-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+.fc-back { font-size: 1rem; line-height: 1.6; animation: fc-reveal 0.18s ease; }
+.fc-back ul { padding-left: 1.2rem; margin: 0.4rem 0; }
+.fc-back li { margin: 0.3rem 0; }
+.fc-back pre {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+@keyframes fc-reveal { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+.fc-hint { margin-top: auto; color: var(--text-faint); font-size: 0.85rem; padding-top: 1.5rem; }
+
+/* Controls */
+.fc-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.fc-controls .spacer { flex: 1; }
+.btn-icon { min-width: 110px; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.done-note { text-align: center; color: var(--text-muted); margin-top: 1rem; }
