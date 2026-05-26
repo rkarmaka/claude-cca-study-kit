@@ -156,7 +156,7 @@
 .lp-card-desc { display: block; color: var(--text-muted); font-size: 0.88rem; line-height: 1.45; }
 
 /* --- Blueprint bars --- */
-.lp-blueprint { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.5rem 0 1rem; max-width: 720px; }
+.lp-blueprint { display: flex; flex-direction: column; gap: 0.7rem; margin: 0.5rem 0 1rem; max-width: none; }
 .lp-bp-row { display: grid; grid-template-columns: 1fr; gap: 0.3rem; }
 .lp-bp-head { display: flex; justify-content: space-between; align-items: baseline; }
 .lp-bp-name { font-size: 0.92rem; }
@@ -370,3 +370,30 @@
   .site-nav a.is-cta { margin-left: 0; }
   .lp-cta .btn { flex: 1 1 auto; text-align: center; }
 }
+
+/* --- Fixed-column card rows (What's inside) --- */
+.lp-grid.row3 { grid-template-columns: repeat(3, 1fr); }
+.lp-grid.row2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 720px) {
+  .lp-grid.row3, .lp-grid.row2 { grid-template-columns: 1fr; }
+}
+
+/* --- Resources as pill links (distinct from the card grids) --- */
+.lp-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.5rem; }
+.lp-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+.lp-link:hover { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+.lp-link-ic { width: 1.05rem; height: 1.05rem; color: var(--accent); flex: none; }
+.lp-link-ext { width: 0.78rem; height: 0.78rem; color: var(--text-faint); flex: none; }
+.lp-link:hover .lp-link-ext { color: var(--accent); }
