@@ -73,10 +73,9 @@
       the Claude API, and the Model Context Protocol (MCP). The practice questions in this kit are
       written as realistic scenarios that test practical judgement, not recall.</p>
 
-    <div class="lp-fit">
-      <p><strong>Best for</strong> developers, architects, AI engineers, and technical PMs.</p>
-      <p><strong>Not for</strong> exam dumps, pass guarantees, or official Anthropic content.</p>
-    </div>
+    <p class="lp-band"><strong>Best for</strong> developers, architects, AI engineers &amp; technical
+      PMs preparing with public exam-guide topics.&nbsp;&nbsp;·&nbsp;&nbsp;<strong>Not for</strong>
+      exam dumps, guaranteed-pass claims, or official Anthropic content.</p>
 
     <div class="lp-facts">
       <div class="lp-fact"><b>60</b><span>scenario-based questions</span></div>
@@ -90,19 +89,19 @@
       <a href="https://github.com/rkarmaka/claude-cca-study-kit/issues/new?labels=correction&amp;title=%5BFix%5D+Outdated+exam+detail" target="_blank" rel="noopener">Report outdated info ↗</a></p>
 
     <h3 class="lp-h3">Score weight by domain</h3>
-    <div id="blueprint" class="lp-chart"></div>
+    <div class="lp-blueprint" id="blueprint"></div>
   </section>
 
   <!-- Recommended path -->
   <section class="lp-wrap lp-section" id="path">
     <h2 class="lp-h2">Recommended study path</h2>
     <ol class="lp-stepper">
-      <li><span class="sn">1</span><span class="st"><strong>Get oriented</strong> — read the <a href="#about">exam overview and weights</a>.</span></li>
-      <li><span class="sn">2</span><span class="st"><strong>Diagnose</strong> — take a short <a href="app/">mixed-domain diagnostic</a>.</span></li>
-      <li><span class="sn">3</span><span class="st"><strong>Study gaps</strong> — review your <a href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes" target="_blank" rel="noopener">weakest domains</a>.</span></li>
-      <li><span class="sn">4</span><span class="st"><strong>Drill</strong> — run the <a href="flashcards/">flashcards</a> daily.</span></li>
-      <li><span class="sn">5</span><span class="st"><strong>Test</strong> — sit the <a href="app/">60-question mock exam</a>.</span></li>
-      <li><span class="sn">6</span><span class="st"><strong>Review</strong> — study your <a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md" target="_blank" rel="noopener">missed-question traps</a>.</span></li>
+      <li><span class="sn">1</span><span class="st"><strong>Get oriented</strong> — read the <a href="#about">exam overview &amp; domain weights</a>.</span></li>
+      <li><span class="sn">2</span><span class="st"><strong>Diagnose</strong> — take a quick <a href="app/">mixed-domain diagnostic</a> to find weak spots.</span></li>
+      <li><span class="sn">3</span><span class="st"><strong>Study the gaps</strong> — review the <a href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes" target="_blank" rel="noopener">domain cheatsheets</a> for your weakest areas.</span></li>
+      <li><span class="sn">4</span><span class="st"><strong>Drill</strong> — run the <a href="flashcards/">flashcards</a> daily until the traps are automatic.</span></li>
+      <li><span class="sn">5</span><span class="st"><strong>Test</strong> — sit a full <a href="app/">60-question mock</a> under the timer.</span></li>
+      <li><span class="sn">6</span><span class="st"><strong>Close the loop</strong> — review misses with the <a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md" target="_blank" rel="noopener">trap sheet</a>.</span></li>
     </ol>
   </section>
 
@@ -172,25 +171,21 @@
 
 <script>
   (function () {
-    // One stacked bar = the whole exam; segment width is the true % of 100.
     var domains = [
-      ["Agentic Architecture & Orchestration", 27, "#c96342"],
-      ["Tool Design & MCP Integration", 18, "#6b8e9e"],
-      ["Claude Code Configuration & Workflows", 20, "#4a7c59"],
-      ["Prompt Engineering & Structured Output", 20, "#b08b3f"],
-      ["Context Management & Reliability", 15, "#8a6f8e"],
+      ["Agentic Architecture & Orchestration", 27],
+      ["Tool Design & MCP Integration", 18],
+      ["Claude Code Configuration & Workflows", 20],
+      ["Prompt Engineering & Structured Output", 20],
+      ["Context Management & Reliability", 15],
     ];
-    var bar = domains.map(function (d) {
-      return '<div class="lp-seg" style="width:' + d[1] + '%;background:' + d[2] +
-        '" title="' + d[0] + ' — ' + d[1] + '%"></div>';
+    var max = 27;
+    document.getElementById("blueprint").innerHTML = domains.map(function (d) {
+      return '<div class="lp-bp-row"><div class="lp-bp-head">' +
+        '<span class="lp-bp-name">' + d[0] + '</span>' +
+        '<span class="lp-bp-pct">' + d[1] + '%</span></div>' +
+        '<div class="lp-bp-track"><div class="lp-bp-fill" style="width:' +
+        Math.round(d[1] / max * 100) + '%"></div></div></div>';
     }).join("");
-    var legend = domains.map(function (d) {
-      return '<li><span class="sw" style="background:' + d[2] + '"></span>' +
-        '<span class="lg-name">' + d[0] + '</span>' +
-        '<span class="lg-pct">' + d[1] + '%</span></li>';
-    }).join("");
-    document.getElementById("blueprint").innerHTML =
-      '<div class="lp-stack">' + bar + '</div><ul class="lp-legend">' + legend + '</ul>';
   })();
 </script>
 </body>
