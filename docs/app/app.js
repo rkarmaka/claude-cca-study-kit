@@ -42,8 +42,25 @@
   var SINGLE_DOMAIN_COUNT = 20;
   var MINUTES_PER_QUESTION = 2; // 60 questions -> 120 minutes
 
+  // Quick diagnostic: ~20 questions spread across domains (sums to 20).
+  var DIAGNOSTIC_DISTRIBUTION = [[1, 5], [2, 3], [3, 4], [4, 4], [5, 3], [0, 1]];
+
+  // Domain -> cheatsheet file (for post-exam recommendations). 0 (cross) has no
+  // single cheatsheet, so it points at the trap sheet.
+  var REPO = "https://github.com/rkarmaka/claude-cca-study-kit/blob/main/";
+  var DOMAIN_NOTE = {
+    1: "study-notes/domain1.md", 2: "study-notes/domain2.md",
+    3: "study-notes/domain3.md", 4: "study-notes/domain4.md",
+    5: "study-notes/domain5.md", 0: "study-notes/master-trap-sheet.md",
+  };
+
   var STORAGE_KEY = "cca-exam-runs";
   var LETTERS = ["A", "B", "C", "D"];
+  var CONFIDENCE = [
+    { k: "guessed", label: "Guessed" },
+    { k: "unsure", label: "Unsure" },
+    { k: "known", label: "Knew it" },
+  ];
 
   // --- State ---
   var QUESTIONS_BY_DOMAIN = null; // {domain: [q, ...]}
@@ -162,13 +179,23 @@
     };
   }
 
-  // mode: "all" for the weighted 60-question exam, or a domain key (0–5) to
-  // drill a single domain.
+  function sampleByDistribution(dist) {
+    var out = [];
+    dist.forEach(function (pair) {
+      out = out.concat(sampleN(QUESTIONS_BY_DOMAIN[pair[0]] || [], pair[1]));
+    });
+    return shuffle(out);
+  }
+
+  // mode: "all" (weighted 60), "diagnostic" (~20 mixed), or a domain key (0–5).
   function startExam(mode) {
     var questions, label;
     if (mode === "all") {
       questions = sampleExam();
-      label = "All domains";
+      label = "Full mock — all domains";
+    } else if (mode === "diagnostic") {
+      questions = sampleByDistribution(DIAGNOSTIC_DISTRIBUTION);
+      label = "Quick diagnostic";
     } else {
       var pool = QUESTIONS_BY_DOMAIN[mode] || [];
       var count = Math.min(SINGLE_DOMAIN_COUNT, pool.length);
@@ -189,6 +216,7 @@
       questions: questions,
       user_answers: {},
       flagged: {},
+      confidence: {},
       max_reached: 0,
       submitted_at: null,
       score: null,
@@ -245,23 +273,33 @@
     clearTimer(); examInProgress = false;
     var runs = listRuns();
 
-    // "All domains" = the weighted 60-question exam; then one card per domain.
-    var cards = modeCard("all", "All domains",
-      TOTAL_QUESTIONS + " questions · " + (TOTAL_QUESTIONS * MINUTES_PER_QUESTION) +
-      " min · weighted by blueprint");
+    var diagN = DIAGNOSTIC_DISTRIBUTION.reduce(function (a, p) { return a + p[1]; }, 0);
+
+    // Two headline modes: a short diagnostic and the full weighted mock.
+    var headline =
+      modeCard("diagnostic", "Quick diagnostic",
+        diagN + " questions · ~" + (diagN * MINUTES_PER_QUESTION) + " min · mixed domains · find your gaps fast") +
+      modeCard("all", "Full mock exam",
+        TOTAL_QUESTIONS + " questions · " + (TOTAL_QUESTIONS * MINUTES_PER_QUESTION) +
+        " min · weighted like the real exam");
+
+    // Single-domain drills.
+    var drills = "";
     [1, 2, 3, 4, 5, 0].forEach(function (d) {
       var pool = (QUESTIONS_BY_DOMAIN[d] || []).length;
       var count = Math.min(SINGLE_DOMAIN_COUNT, pool);
-      cards += modeCard(d, DOMAIN_FULL[d],
+      drills += modeCard(d, DOMAIN_FULL[d],
         count + " questions · " + (count * MINUTES_PER_QUESTION) + " min");
     });
 
     var html =
       '<section class="hero" style="padding-bottom:1rem">' +
         "<h1>Claude Certified Architect<br><span class=\"hero-sub\">Foundations · Practice Exam</span></h1>" +
-        '<p class="muted">Pick a focus to begin. Pass at ' + PASS_SCALED_SCORE + "/1000.</p>" +
+        '<p class="muted">New here? Start with the quick diagnostic. Pass at ' + PASS_SCALED_SCORE + "/1000.</p>" +
       "</section>" +
-      '<div class="mode-grid">' + cards + "</div>" +
+      '<div class="mode-grid">' + headline + "</div>" +
+      '<p class="mode-divider">Or drill a single domain</p>' +
+      '<div class="mode-grid">' + drills + "</div>" +
       '<p class="muted" style="font-size:0.88rem;margin-top:0.25rem">' +
       "Your attempts are saved only in this browser — no account, nothing uploaded. " +
       "You can pause and resume anytime; your score appears only after you submit.</p>";
@@ -277,7 +315,7 @@
     view.querySelectorAll(".mode-card").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var m = btn.dataset.mode;
-        startExam(m === "all" ? "all" : parseInt(m, 10));
+        startExam((m === "all" || m === "diagnostic") ? m : parseInt(m, 10));
       });
     });
   }
@@ -354,22 +392,38 @@
     function renderQuestion() {
       var q = run.questions[idx];
       var sel = run.user_answers[String(q.id)];
+      var conf = run.confidence[String(q.id)];
       var opts = LETTERS.map(function (L) {
         return '<label class="option"><input type="radio" name="q_' + q.id + '" value="' + L + '"' +
           (sel === L ? " checked" : "") + '><span class="option-letter">' + L +
           '</span><span class="option-text">' + md(q.options[L]) + "</span></label>";
+      }).join("");
+      var confRow = CONFIDENCE.map(function (c) {
+        return '<button type="button" class="conf-btn' + (conf === c.k ? " on" : "") +
+          '" data-conf="' + c.k + '">' + c.label + "</button>";
       }).join("");
       qc.innerHTML =
         '<article class="question-card"><header class="q-header">' +
         '<span class="q-num">Question ' + (idx + 1) + " of " + n + "</span>" +
         '<span class="q-domain">' + escapeHtml(DOMAIN_SHORT[q.domain]) + "</span></header>" +
         '<div class="q-text">' + md(q.question) + "</div>" +
-        '<fieldset class="q-options">' + opts + "</fieldset></article>";
+        '<fieldset class="q-options">' + opts + "</fieldset>" +
+        '<div class="conf-row"><span class="conf-label">How sure are you?</span>' + confRow + "</div></article>";
       qc.querySelectorAll('input[type="radio"]').forEach(function (r) {
         r.addEventListener("change", function () {
           run.user_answers[String(q.id)] = r.value;
           saveRun(run);
           updateChrome();
+        });
+      });
+      qc.querySelectorAll(".conf-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var key = String(q.id), v = b.dataset.conf;
+          if (run.confidence[key] === v) delete run.confidence[key]; else run.confidence[key] = v;
+          saveRun(run);
+          qc.querySelectorAll(".conf-btn").forEach(function (x) {
+            x.classList.toggle("on", x.dataset.conf === run.confidence[key]);
+          });
         });
       });
       updateChrome();
@@ -467,13 +521,36 @@
     if (!run.submitted_at) { location.hash = "#/exam/" + id; return; }
     var sc = run.score;
 
-    var rows = Object.keys(sc.by_domain).map(function (k) { return sc.by_domain[k]; })
+    var domainList = Object.keys(sc.by_domain).map(function (k) { return sc.by_domain[k]; });
+
+    var rows = domainList.slice()
       .sort(function (a, b) { return a.id - b.id; })
       .map(function (d) {
         return "<tr><td>" + escapeHtml(d.label) + '</td><td class="mono">' + d.correct + "/" + d.total +
           '</td><td class="mono">' + d.percent + '%</td><td><div class="bar"><div class="bar-fill" style="width: ' +
           d.percent + '%"></div></div></td></tr>';
       }).join("");
+
+    // Recommend the weakest domains: those under 70%, or the single lowest if all
+    // passed but the run wasn't perfect.
+    var ranked = domainList.filter(function (d) { return d.total > 0; })
+      .sort(function (a, b) { return a.percent - b.percent; });
+    var weak = ranked.filter(function (d) { return d.percent < 70; });
+    if (!weak.length && ranked.length && ranked[0].percent < 100) weak = [ranked[0]];
+    weak = weak.slice(0, 2);
+
+    var recsHtml = "";
+    if (weak.length) {
+      recsHtml = '<section class="recs"><h2>Focus next on</h2><div class="rec-grid">' +
+        weak.map(function (d) {
+          var note = REPO + (DOMAIN_NOTE[d.id] || "study-notes/master-trap-sheet.md");
+          var fc = (d.id >= 1 && d.id <= 5) ? "../flashcards/#D" + d.id : "../flashcards/";
+          return '<div class="rec-card"><div class="rec-head"><span class="rec-name">' +
+            escapeHtml(d.label) + '</span><span class="rec-pct">' + d.percent + "%</span></div>" +
+            '<div class="rec-links"><a href="' + note + '" target="_blank" rel="noopener">Review cheatsheet ↗</a>' +
+            '<a href="' + fc + '">Drill flashcards →</a></div></div>';
+        }).join("") + "</div></section>";
+    }
 
     view.innerHTML =
       '<section class="results-hero ' + (sc.passed ? "pass" : "fail") + '"><div class="score-stack">' +
@@ -483,6 +560,7 @@
         "% · pass at " + run.pass_threshold + "/1000</div></div>" +
         '<div class="actions"><a href="#/review/' + id + '" class="btn btn-primary">Review Answers</a>' +
         '<a href="#/" class="btn btn-secondary">Home</a></div></section>' +
+      recsHtml +
       "<section><h2>Per-domain breakdown</h2>" +
         '<table class="domain-table"><thead><tr><th>Domain</th><th>Score</th><th>Percent</th><th></th></tr></thead>' +
         "<tbody>" + rows + "</tbody></table></section>" +
@@ -512,11 +590,26 @@
         if (L === ua && ua !== q.correct) tags += '<span class="tag tag-yours">your answer</span>';
         return '<li class="' + cls.trim() + '"><strong>' + L + ")</strong> " + md(q.options[L]) + " " + tags + "</li>";
       }).join("");
+
+      // Confidence callout: surface lucky guesses and overconfident misses.
+      var conf = run.confidence[String(q.id)];
+      var confNote = "";
+      if (conf) {
+        var msg = "";
+        if (conf === "guessed" && isCorrect) msg = "Marked “guessed” and got it right — a lucky guess. Revisit this one.";
+        else if (conf === "known" && !isCorrect && ua) msg = "Marked “knew it” but got it wrong — a blind spot worth studying.";
+        else if (conf === "guessed") msg = "You guessed here.";
+        else if (conf === "unsure") msg = "You were unsure here.";
+        else msg = "You felt confident here.";
+        var tone = (conf === "guessed" && isCorrect) ? "warn" : ((conf === "known" && !isCorrect && ua) ? "bad" : "neutral");
+        confNote = '<p class="conf-note ' + tone + '">' + msg + "</p>";
+      }
+
       return '<article class="review-card ' + state + '" data-state="' + state + '"><header class="q-header">' +
         '<span class="q-num">Q' + (i + 1) + " · " + escapeHtml(DOMAIN_SHORT[q.domain]) + "</span>" +
         '<span class="q-result">' + resultText + "</span></header>" +
         '<div class="q-text">' + md(q.question) + "</div>" +
-        '<ul class="review-options">' + opts + "</ul>" +
+        '<ul class="review-options">' + opts + "</ul>" + confNote +
         '<details class="explanation"' + (isCorrect ? "" : " open") + "><summary>Explanation</summary><p>" +
         md(q.explanation) + "</p></details></article>";
     }).join("");

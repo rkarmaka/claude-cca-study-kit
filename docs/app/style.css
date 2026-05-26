@@ -741,3 +741,42 @@ input:focus-visible,
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* --- Start-screen mode divider --- */
+.mode-divider {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 1.75rem 0 0.9rem;
+}
+
+/* --- Confidence control (exam) --- */
+.conf-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.conf-label { font-size: 0.85rem; color: var(--text-muted); margin-right: 0.25rem; }
+.conf-btn {
+  font: inherit; font-size: 0.82rem; padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border-strong); background: var(--card-bg);
+  color: var(--text-muted); border-radius: 999px; cursor: pointer; transition: all 0.12s;
+}
+.conf-btn:hover { border-color: var(--accent); color: var(--text); }
+.conf-btn.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+/* --- Confidence callout (review) --- */
+.conf-note { font-size: 0.86rem; border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; margin: 0.5rem 0; }
+.conf-note.warn { background: rgba(176, 139, 63, 0.12); color: var(--pending); }
+.conf-note.bad { background: var(--fail-soft); color: var(--fail); }
+.conf-note.neutral { background: var(--bg-sunken); color: var(--text-muted); }
+
+/* --- Weak-domain recommendations (results) --- */
+.recs { margin: 1.5rem 0; }
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 0.6rem; }
+.rec-card { background: var(--accent-soft); border: 1px solid rgba(201, 99, 66, 0.3); border-radius: var(--radius); padding: 1rem 1.1rem; }
+.rec-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+.rec-name { font-weight: 600; }
+.rec-pct { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rec-links { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.9rem; }
