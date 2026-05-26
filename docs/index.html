@@ -24,6 +24,10 @@
   <symbol id="ic-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 4v15"/></symbol>
   <symbol id="ic-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v5c0 5-4 8-8 10-4-2-8-5-8-10V6z"/><path d="M12 9v4"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/></symbol>
   <symbol id="ic-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 1 1 3.6 2.3c-.8.5-1.1 1-1.1 1.9"/><circle cx="12" cy="16.5" r="0.6" fill="currentColor"/></symbol>
+  <symbol id="ic-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 13.5L7.5 21 12 18.5 16.5 21 15 13.5"/></symbol>
+  <symbol id="ic-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3"/><path d="M13 15h4"/></symbol>
+  <symbol id="ic-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5a3 3 0 0 0 4.5.4l2-2a3 3 0 0 0-4.2-4.2l-1.1 1.1"/><path d="M13.5 10.5a3 3 0 0 0-4.5-.4l-2 2a3 3 0 0 0 4.2 4.2l1.1-1.1"/></symbol>
+  <symbol id="ic-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
   <symbol id="ic-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10z"/></symbol>
 </svg>
 
@@ -31,8 +35,9 @@
   <div class="container site-header-inner">
     <a href="./" class="site-title"><span class="dot"></span>CCA&nbsp;Foundations</a>
     <nav class="site-nav">
-      <a href="#practice">Practice</a>
-      <a href="#notes">Notes</a>
+      <a href="#about">About</a>
+      <a href="#inside">What's inside</a>
+      <a href="#resources">Resources</a>
       <a href="app/" class="is-cta">Mock&nbsp;Exam</a>
     </nav>
   </div>
@@ -58,41 +63,42 @@
 </section>
 
 <main>
-  <!-- How it works -->
-  <section class="lp-wrap lp-section">
-    <h2 class="lp-h2">A simple way to study</h2>
-    <p class="lp-sub">Three passes get most people to a confident pass.</p>
-    <div class="lp-steps">
-      <div class="lp-step">
-        <span class="lp-step-n">1</span>
-        <h3>Learn</h3>
-        <p>Work through the five domain cheatsheets and the glossary. See the
-           <a class="repo-link" data-path="STUDY-GUIDE.md" href="#">two-week plan →</a></p>
-      </div>
-      <div class="lp-step">
-        <span class="lp-step-n">2</span>
-        <h3>Drill</h3>
-        <p>Run the <a href="flashcards/">flashcards</a> daily — by weak domain or all
-           at once — until the rules and traps are automatic.</p>
-      </div>
-      <div class="lp-step">
-        <span class="lp-step-n">3</span>
-        <h3>Test</h3>
-        <p>Sit a <a href="app/">timed mock exam</a>, then review every miss against the
-           matching cheatsheet's distractor list.</p>
-      </div>
+  <!-- About the exam -->
+  <section class="lp-wrap lp-section" id="about">
+    <h2 class="lp-h2">About the exam</h2>
+    <p class="lp-about-text">
+      The <strong>Claude Certified Architect — Foundations</strong> (CCA-F) is
+      Anthropic's first official technical certification. It validates that a solution
+      architect can make sound production tradeoffs when building real applications with
+      Claude — across <strong>Claude Code</strong>, the <strong>Claude Agent SDK</strong>,
+      the <strong>Claude API</strong>, and the <strong>Model Context Protocol (MCP)</strong>.
+      Every question is grounded in a realistic scenario and tests practical judgement,
+      not recall.
+    </p>
+
+    <div class="lp-facts">
+      <div class="lp-fact"><b>60</b><span>scenario-based multiple-choice questions</span></div>
+      <div class="lp-fact"><b>120 min</b><span>proctored, timed</span></div>
+      <div class="lp-fact"><b>4 of 6</b><span>scenarios shown, picked at random</span></div>
+      <div class="lp-fact"><b>720<span style="color:var(--text-faint)">/1000</span></b><span>scaled score to pass</span></div>
     </div>
+
+    <h3 class="lp-h3">How the score breaks down by domain</h3>
+    <div class="lp-blueprint" id="blueprint"></div>
+    <p class="muted" style="font-size:0.88rem">Spend study time roughly in proportion — Domain 1 is the biggest single lever.</p>
   </section>
 
-  <!-- Practice -->
-  <section class="lp-wrap lp-section" id="practice">
-    <h2 class="lp-h2">Practice</h2>
-    <p class="lp-sub">Interactive and runnable right in the browser.</p>
+  <!-- What this site offers -->
+  <section class="lp-wrap lp-section" id="inside">
+    <h2 class="lp-h2">What's inside</h2>
+    <p class="lp-sub">Everything you need to prepare, free and in your browser.</p>
+
+    <h3 class="lp-h3">Practice</h3>
     <div class="lp-grid">
       <a class="lp-card feature" href="app/">
         <span class="lp-ic"><svg><use href="#ic-clock"/></svg></span>
         <span><span class="lp-card-title">Timed mock exam</span>
-          <span class="lp-card-desc">Pick a focus, 120-minute timer, scaled scoring and a per-domain breakdown — one question at a time.</span></span>
+          <span class="lp-card-desc">Pick a focus, 120-minute timer, scaled scoring and a per-domain breakdown — one question at a time, like the real exam.</span></span>
       </a>
       <a class="lp-card feature" href="flashcards/">
         <span class="lp-ic"><svg><use href="#ic-cards"/></svg></span>
@@ -105,12 +111,8 @@
           <span class="lp-card-desc">A fixed 60-question set with answers inline — handy for printing or offline.</span></span>
       </a>
     </div>
-  </section>
 
-  <!-- Study notes -->
-  <section class="lp-wrap lp-section" id="notes">
-    <h2 class="lp-h2">Study notes</h2>
-    <p class="lp-sub">Decision-rule cheatsheets, not walls of text.</p>
+    <h3 class="lp-h3">Study materials</h3>
     <div class="lp-grid">
       <a class="lp-card repo-link" data-path="STUDY-GUIDE.md" href="#">
         <span class="lp-ic"><svg><use href="#ic-compass"/></svg></span>
@@ -120,7 +122,7 @@
       <a class="lp-card repo-link" data-path="study-notes" href="#">
         <span class="lp-ic"><svg><use href="#ic-layers"/></svg></span>
         <span><span class="lp-card-title">Domain cheatsheets</span>
-          <span class="lp-card-desc">Condensed notes for all five exam domains.</span></span>
+          <span class="lp-card-desc">Decision-rule notes for all five exam domains.</span></span>
       </a>
       <a class="lp-card repo-link" data-path="study-notes/scenario-guide.md" href="#">
         <span class="lp-ic"><svg><use href="#ic-grid"/></svg></span>
@@ -138,28 +140,44 @@
           <span class="lp-card-desc">Every distractor pattern on one page — read it exam morning.</span></span>
       </a>
     </div>
-
-    <h2 class="lp-h2">Reference</h2>
-    <div class="lp-grid">
-      <a class="lp-card repo-link" data-path="practice-exam/question-bank.md" href="#">
-        <span class="lp-ic"><svg><use href="#ic-help"/></svg></span>
-        <span><span class="lp-card-title">Question bank</span>
-          <span class="lp-card-desc">220 questions with answers and explanations.</span></span>
-      </a>
-      <a class="lp-card repo-root" href="#">
-        <span class="lp-ic"><svg><use href="#ic-github"/></svg></span>
-        <span><span class="lp-card-title">Source on GitHub</span>
-          <span class="lp-card-desc">Notes, the Flask app, and a contribution guide.</span></span>
-      </a>
-    </div>
   </section>
 
-  <!-- Blueprint -->
-  <section class="lp-wrap lp-section">
-    <h2 class="lp-h2">Exam blueprint</h2>
-    <p class="lp-sub">Where the points are. Spend time roughly in proportion.</p>
-    <div class="lp-blueprint" id="blueprint"></div>
-    <p class="muted" style="font-size:0.88rem">Pass mark 720/1000, scaled across 4 of 6 scenarios.</p>
+  <!-- Resources & links -->
+  <section class="lp-wrap lp-section" id="resources">
+    <h2 class="lp-h2">Resources &amp; links</h2>
+    <p class="lp-sub">The official exam, the docs it's based on, and this project's source.</p>
+    <div class="lp-resource-grid">
+      <a class="lp-resource" href="https://anthropic.skilljar.com/" target="_blank" rel="noopener">
+        <span class="lp-ic"><svg><use href="#ic-award"/></svg></span>
+        <span class="r-text"><span class="r-title">Official exam &amp; courses</span><span class="r-sub">Anthropic Academy</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+      <a class="lp-resource" href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener">
+        <span class="lp-ic"><svg><use href="#ic-terminal"/></svg></span>
+        <span class="r-text"><span class="r-title">Claude Code docs</span><span class="r-sub">code.claude.com</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+      <a class="lp-resource" href="https://platform.claude.com/docs/en/agent-sdk/overview" target="_blank" rel="noopener">
+        <span class="lp-ic"><svg><use href="#ic-doc"/></svg></span>
+        <span class="r-text"><span class="r-title">Agent SDK &amp; API docs</span><span class="r-sub">platform.claude.com</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+      <a class="lp-resource" href="https://modelcontextprotocol.io" target="_blank" rel="noopener">
+        <span class="lp-ic"><svg><use href="#ic-plug"/></svg></span>
+        <span class="r-text"><span class="r-title">Model Context Protocol</span><span class="r-sub">modelcontextprotocol.io</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+      <a class="lp-resource repo-link" data-path="practice-exam/question-bank.md" href="#">
+        <span class="lp-ic"><svg><use href="#ic-help"/></svg></span>
+        <span class="r-text"><span class="r-title">Question bank (220)</span><span class="r-sub">with explanations</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+      <a class="lp-resource repo-root" href="#">
+        <span class="lp-ic"><svg><use href="#ic-github"/></svg></span>
+        <span class="r-text"><span class="r-title">GitHub repository</span><span class="r-sub">source &amp; contributing</span></span>
+        <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
+      </a>
+    </div>
 
     <div class="lp-note">
       <strong>Independent community project.</strong> Not affiliated with, endorsed by,
@@ -196,7 +214,7 @@
     }).join("");
   })();
 
-  // Resolve repo links from the github.io host so notes open on github.com.
+  // Resolve repo links from the github.io host so they open on github.com.
   (function () {
     var host = location.hostname, parts = location.pathname.split('/').filter(Boolean);
     var base = null;
@@ -206,9 +224,10 @@
     document.querySelectorAll('.repo-link').forEach(function (a) {
       var path = a.getAttribute('data-path');
       a.href = base ? base + '/blob/main/' + path : '../' + path;
+      if (base) { a.target = "_blank"; a.rel = "noopener"; }
     });
     document.querySelectorAll('.repo-root').forEach(function (a) {
-      if (base) a.href = base;
+      if (base) { a.href = base; a.target = "_blank"; a.rel = "noopener"; }
     });
   })();
 </script>
