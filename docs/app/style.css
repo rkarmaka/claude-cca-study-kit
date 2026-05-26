@@ -682,3 +682,47 @@ h2 {
   background: var(--pending); border: 1px solid var(--card-bg);
 }
 .flag-on { color: var(--pending) !important; border-color: var(--pending) !important; }
+
+/* --- Start screen: exam-mode chooser --- */
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 0 0 2.5rem;
+}
+.mode-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-align: left;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+.mode-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+.mode-card .mode-name { font-weight: 600; }
+.mode-card .mode-sub { color: var(--text-muted); font-size: 0.85rem; }
+.mode-card[data-mode="all"] { border-color: var(--accent); background: var(--accent-soft); }
+
+/* --- Exam status bar (question sits directly below it) --- */
+.exam-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.exam-topbar .progress-text { font-weight: 600; font-size: 0.95rem; }
+.timer-wrap { display: flex; align-items: baseline; gap: 0.4rem; white-space: nowrap; }
+.exam-topbar .timer { font-size: 1.4rem; }
+
+/* Locked (not-yet-reached) palette buttons — no skipping ahead */
+.pal-btn.locked { opacity: 0.38; cursor: not-allowed; }
+.pal-btn.locked:hover { border-color: var(--border-strong); color: var(--text-muted); }

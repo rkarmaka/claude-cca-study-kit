@@ -28,6 +28,20 @@
     0: "Cross-Domain",
   };
 
+  var DOMAIN_FULL = {
+    1: "Agentic Architecture & Orchestration",
+    2: "Tool Design & MCP Integration",
+    3: "Claude Code Configuration & Workflows",
+    4: "Prompt Engineering & Structured Output",
+    5: "Context Management & Reliability",
+    0: "Cross-Domain Integrative",
+  };
+
+  // A single-domain drill draws this many questions from that domain (capped to
+  // the pool size). "All domains" still uses the weighted 60-question mix above.
+  var SINGLE_DOMAIN_COUNT = 20;
+  var MINUTES_PER_QUESTION = 2; // 60 questions -> 120 minutes
+
   var STORAGE_KEY = "cca-exam-runs";
   var LETTERS = ["A", "B", "C", "D"];
 
@@ -148,17 +162,34 @@
     };
   }
 
-  function startExam() {
+  // mode: "all" for the weighted 60-question exam, or a domain key (0–5) to
+  // drill a single domain.
+  function startExam(mode) {
+    var questions, label;
+    if (mode === "all") {
+      questions = sampleExam();
+      label = "All domains";
+    } else {
+      var pool = QUESTIONS_BY_DOMAIN[mode] || [];
+      var count = Math.min(SINGLE_DOMAIN_COUNT, pool.length);
+      questions = shuffle(sampleN(pool, count));
+      label = DOMAIN_FULL[mode];
+    }
+    var duration = questions.length * MINUTES_PER_QUESTION;
     var started = new Date();
-    var expires = new Date(started.getTime() + EXAM_DURATION_MINUTES * 60000);
+    var expires = new Date(started.getTime() + duration * 60000);
     var run = {
       exam_id: makeId(),
+      mode: mode,
+      mode_label: label,
       started_at: started.toISOString(),
       expires_at: expires.toISOString(),
-      duration_minutes: EXAM_DURATION_MINUTES,
+      duration_minutes: duration,
       pass_threshold: PASS_SCALED_SCORE,
-      questions: sampleExam(),
+      questions: questions,
       user_answers: {},
+      flagged: {},
+      max_reached: 0,
       submitted_at: null,
       score: null,
     };
@@ -204,21 +235,33 @@
   // --- Views ---
   function clearTimer() { if (activeTimer) { clearInterval(activeTimer); activeTimer = null; } }
 
+  function modeCard(mode, title, sub) {
+    return '<button type="button" class="mode-card" data-mode="' + mode + '">' +
+      '<span class="mode-name">' + escapeHtml(title) + "</span>" +
+      '<span class="mode-sub">' + sub + "</span></button>";
+  }
+
   function renderHome() {
     clearTimer(); examInProgress = false;
     var runs = listRuns();
-    var dist = DOMAIN_DISTRIBUTION.map(function (p) {
-      return "<li><span>" + DOMAIN_SHORT[p[0]] + '</span><span class="muted">' + p[1] + " questions</span></li>";
-    }).join("");
+
+    // "All domains" = the weighted 60-question exam; then one card per domain.
+    var cards = modeCard("all", "All domains",
+      TOTAL_QUESTIONS + " questions · " + (TOTAL_QUESTIONS * MINUTES_PER_QUESTION) +
+      " min · weighted by blueprint");
+    [1, 2, 3, 4, 5, 0].forEach(function (d) {
+      var pool = (QUESTIONS_BY_DOMAIN[d] || []).length;
+      var count = Math.min(SINGLE_DOMAIN_COUNT, pool);
+      cards += modeCard(d, DOMAIN_FULL[d],
+        count + " questions · " + (count * MINUTES_PER_QUESTION) + " min");
+    });
 
     var html =
-      '<section class="hero">' +
+      '<section class="hero" style="padding-bottom:1rem">' +
         "<h1>Claude Certified Architect<br><span class=\"hero-sub\">Foundations · Practice Exam</span></h1>" +
-        '<p class="muted">' + TOTAL_QUESTIONS + " questions · " + EXAM_DURATION_MINUTES +
-          " minutes · Pass at " + PASS_SCALED_SCORE + "/1000</p>" +
-        '<div class="start-form"><button type="button" id="start-btn" class="btn btn-primary btn-lg">Start New Exam</button></div>' +
-        '<details class="distribution"><summary>Question distribution</summary><ul>' + dist + "</ul></details>" +
-      "</section>";
+        '<p class="muted">Pick a focus to begin. Pass at ' + PASS_SCALED_SCORE + "/1000.</p>" +
+      "</section>" +
+      '<div class="mode-grid">' + cards + "</div>";
 
     if (runs.length) {
       html +=
@@ -228,7 +271,12 @@
         runsTableRows(runs.slice(0, 5), false) + "</tbody></table></section>";
     }
     view.innerHTML = html;
-    document.getElementById("start-btn").addEventListener("click", startExam);
+    view.querySelectorAll(".mode-card").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var m = btn.dataset.mode;
+        startExam(m === "all" ? "all" : parseInt(m, 10));
+      });
+    });
   }
 
   function renderExam(id) {
@@ -246,11 +294,13 @@
 
     // Shell is rendered once so the timer keeps running across navigation;
     // only #question-container and the chrome update as you move between cards.
+    // The question sits at the top, under a slim status bar.
     view.innerHTML =
-      '<div class="exam-header"><div><h1>Practice Exam</h1>' +
-        '<p class="muted" id="exam-progress"></p></div>' +
-        '<div class="timer-container"><div id="timer" class="timer">--:--</div>' +
-        '<div class="muted timer-label">time remaining</div></div></div>' +
+      '<div class="exam-topbar">' +
+        '<span class="progress-text" id="exam-progress"></span>' +
+        '<div class="timer-wrap"><span id="timer" class="timer">--:--</span>' +
+        '<span class="muted timer-label">left</span></div>' +
+      "</div>" +
       '<div id="question-container"></div>' +
       '<div class="exam-nav">' +
         '<button type="button" class="btn btn-secondary btn-icon" id="prev-btn">← Previous</button>' +
@@ -259,8 +309,8 @@
         '<button type="button" class="btn btn-primary btn-icon" id="next-btn">Next →</button>' +
       "</div>" +
       '<div class="palette" id="palette" aria-label="Question navigator">' + palette + "</div>" +
-      '<div class="exam-footer"><p class="muted">Move with Previous / Next or the numbered grid above. ' +
-        "Unanswered questions are counted as incorrect.</p>" +
+      '<div class="exam-footer"><p class="muted">Continue with Next. You can revisit earlier ' +
+        "questions, but you can't skip ahead. Unanswered questions count as incorrect.</p>" +
         '<button type="button" class="btn btn-primary btn-lg" id="submit-btn">Submit Exam</button></div>' +
       '<dialog id="confirm-submit" class="confirm-dialog"><h3>Submit exam?</h3>' +
         '<p id="unanswered-warning" class="muted"></p>' +
@@ -294,7 +344,9 @@
     var warningEl = document.getElementById("unanswered-warning");
     var palBtns = Array.prototype.slice.call(view.querySelectorAll(".pal-btn"));
     var expiresAt = new Date(run.expires_at);
-    var idx = 0, autoSubmitted = false, submitting = false;
+    var maxReached = run.max_reached || 0;          // furthest question unlocked
+    var idx = Math.min(maxReached, n - 1);          // resume where they left off
+    var autoSubmitted = false, submitting = false;
 
     function renderQuestion() {
       var q = run.questions[idx];
@@ -323,7 +375,8 @@
 
     function updateChrome() {
       var q = run.questions[idx];
-      progressEl.textContent = "Question " + (idx + 1) + " of " + n +
+      var prefix = run.mode_label ? (run.mode_label + " · ") : "";
+      progressEl.textContent = prefix + "Question " + (idx + 1) + " of " + n +
         " · " + countAnswered(run) + " answered";
       prevBtn.disabled = idx === 0;
       nextBtn.disabled = idx === n - 1;
@@ -332,16 +385,32 @@
       flagBtn.textContent = flagged ? "⚑ Flagged" : "⚑ Flag";
       palBtns.forEach(function (b, i) {
         var qq = run.questions[i];
+        var locked = i > maxReached;
         b.classList.toggle("answered", !!run.user_answers[String(qq.id)]);
         b.classList.toggle("flagged", !!run.flagged[String(qq.id)]);
         b.classList.toggle("current", i === idx);
+        b.classList.toggle("locked", locked);
+        b.disabled = locked;
       });
     }
 
-    function goTo(i) { idx = Math.max(0, Math.min(n - 1, i)); renderQuestion(); }
+    // Move freely among questions already reached, but never past the frontier.
+    function goTo(i) { idx = Math.max(0, Math.min(maxReached, i)); renderQuestion(); }
+
+    function advance() {
+      if (idx >= n - 1) return;
+      var target = idx + 1;
+      if (target > maxReached) {           // unlock the next question once
+        maxReached = target;
+        run.max_reached = maxReached;
+        saveRun(run);
+      }
+      idx = target;
+      renderQuestion();
+    }
 
     prevBtn.addEventListener("click", function () { goTo(idx - 1); });
-    nextBtn.addEventListener("click", function () { goTo(idx + 1); });
+    nextBtn.addEventListener("click", advance);
     flagBtn.addEventListener("click", function () {
       var key = String(run.questions[idx].id);
       if (run.flagged[key]) delete run.flagged[key]; else run.flagged[key] = true;
@@ -414,7 +483,9 @@
       "<section><h2>Per-domain breakdown</h2>" +
         '<table class="domain-table"><thead><tr><th>Domain</th><th>Score</th><th>Percent</th><th></th></tr></thead>' +
         "<tbody>" + rows + "</tbody></table></section>" +
-      '<section class="meta"><p class="muted">Started ' + formatDt(run.started_at) + " · Submitted " +
+      '<section class="meta">' +
+        (run.mode_label ? '<p class="muted">Focus: ' + escapeHtml(run.mode_label) + "</p>" : "") +
+        '<p class="muted">Started ' + formatDt(run.started_at) + " · Submitted " +
         formatDt(run.submitted_at) + " · Duration " + formatDur(run.duration_seconds) + "</p>" +
         '<p class="muted">Exam ID <code>' + escapeHtml(run.exam_id) + "</code></p></section>";
   }
