@@ -262,3 +262,54 @@
 .lp-resource .r-sub { color: var(--text-faint); font-size: 0.74rem; }
 .lp-resource .r-ext { margin-left: auto; color: var(--text-faint); flex: none; }
 .lp-resource .r-ext svg { width: 0.85rem; height: 0.85rem; display: block; }
+
+/* --- Hero disclaimer + verified labels --- */
+.lp-disclaimer {
+  margin: 1rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 40rem;
+}
+.lp-disclaimer strong { color: var(--text); }
+.lp-verified {
+  font-size: 0.84rem;
+  color: var(--text-faint);
+  margin: 0.5rem 0 0;
+}
+.lp-verified a { color: var(--accent); }
+
+/* --- Who it's for --- */
+.lp-who {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+.lp-who-col {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.2rem;
+}
+.lp-who-col.good { border-left: 3px solid var(--pass); }
+.lp-who-col.bad { border-left: 3px solid var(--fail); }
+.lp-who-h {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.lp-who-col.good .lp-who-h { color: var(--pass); }
+.lp-who-col.bad .lp-who-h { color: var(--fail); }
+.lp-who-col p { margin: 0; font-size: 0.92rem; color: var(--text-muted); }
+
+/* --- Responsive header nav --- */
+@media (max-width: 560px) {
+  .site-header-inner { padding: 0.75rem 1rem; }
+  .site-nav a:not(.is-cta) { display: none; }      /* keep brand + Mock Exam CTA */
+  .site-nav a.is-cta { margin-left: 0; }
+  .lp-cta .btn { flex: 1 1 auto; text-align: center; }
+}

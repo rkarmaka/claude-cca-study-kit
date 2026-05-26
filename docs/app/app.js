@@ -261,7 +261,10 @@
         "<h1>Claude Certified Architect<br><span class=\"hero-sub\">Foundations · Practice Exam</span></h1>" +
         '<p class="muted">Pick a focus to begin. Pass at ' + PASS_SCALED_SCORE + "/1000.</p>" +
       "</section>" +
-      '<div class="mode-grid">' + cards + "</div>";
+      '<div class="mode-grid">' + cards + "</div>" +
+      '<p class="muted" style="font-size:0.88rem;margin-top:0.25rem">' +
+      "Your attempts are saved only in this browser — no account, nothing uploaded. " +
+      "You can pause and resume anytime; your score appears only after you submit.</p>";
 
     if (runs.length) {
       html +=

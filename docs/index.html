@@ -48,7 +48,10 @@
     <span class="lp-pill">● Unofficial · community-built · free</span>
     <h1 class="lp-title">Study smarter for the <span class="accent">Claude Certified Architect</span> — Foundations exam</h1>
     <p class="lp-lede">Condensed domain notes, 111 flashcards, a 220-question bank, and a
-      timed mock exam that feels like the real thing — open source, no sign-up.</p>
+      timed mock exam designed to approximate the public exam format — open source, no sign-up.</p>
+    <p class="lp-disclaimer">Unofficial community prep kit, built from public exam-guide topics.
+      <strong>Not affiliated with Anthropic.</strong> All questions are original practice
+      questions, not real exam items.</p>
     <div class="lp-cta">
       <a class="btn btn-primary btn-lg" href="app/">Take a mock exam</a>
       <a class="btn btn-secondary btn-lg" href="flashcards/">Study flashcards</a>
@@ -83,15 +86,53 @@
       <div class="lp-fact"><b>720<span style="color:var(--text-faint)">/1000</span></b><span>scaled score to pass</span></div>
     </div>
 
+    <p class="lp-verified">
+      Source: Anthropic's public exam guide &amp; Academy · Last verified <strong>26 May 2026</strong> ·
+      <a href="https://github.com/rkarmaka/claude-cca-study-kit/issues/new?labels=correction&amp;title=%5BFix%5D+Outdated+exam+detail" target="_blank" rel="noopener">Report outdated info ↗</a>
+    </p>
+
     <h3 class="lp-h3">How the score breaks down by domain</h3>
     <div class="lp-blueprint" id="blueprint"></div>
     <p class="muted" style="font-size:0.88rem">Spend study time roughly in proportion — Domain 1 is the biggest single lever.</p>
+
+    <div class="lp-who">
+      <div class="lp-who-col good">
+        <span class="lp-who-h">Good for</span>
+        <p>Developers, solution architects, AI engineers, and technical PMs studying Claude Code,
+          the Agent SDK, the Claude API, MCP, prompt engineering, and context-management tradeoffs.</p>
+      </div>
+      <div class="lp-who-col bad">
+        <span class="lp-who-h">Not for</span>
+        <p>Anyone after real exam dumps, guaranteed-pass claims, or official Anthropic
+          certification content.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommended study path -->
+  <section class="lp-wrap lp-section" id="path">
+    <h2 class="lp-h2">Recommended study path</h2>
+    <p class="lp-sub">New here? Work these six steps in order.</p>
+    <div class="lp-steps">
+      <div class="lp-step"><span class="lp-step-n">1</span><h3>Get oriented</h3>
+        <p>Read the <a href="#about">exam overview &amp; domain weights</a> so you know where the points are.</p></div>
+      <div class="lp-step"><span class="lp-step-n">2</span><h3>Diagnose</h3>
+        <p>Take a quick <a href="app/">mixed-domain diagnostic</a> to find your weak spots fast.</p></div>
+      <div class="lp-step"><span class="lp-step-n">3</span><h3>Study the gaps</h3>
+        <p>Review the <a class="repo-link" data-path="study-notes" href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes">domain cheatsheets</a> for your weakest areas.</p></div>
+      <div class="lp-step"><span class="lp-step-n">4</span><h3>Drill daily</h3>
+        <p>Run the <a href="flashcards/">flashcards</a> until the rules and traps are automatic.</p></div>
+      <div class="lp-step"><span class="lp-step-n">5</span><h3>Test under time</h3>
+        <p>Sit a full <a href="app/">60-question mock exam</a> with the 120-minute timer.</p></div>
+      <div class="lp-step"><span class="lp-step-n">6</span><h3>Close the loop</h3>
+        <p>Review every miss against the <a class="repo-link" data-path="study-notes/master-trap-sheet.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md">master trap sheet</a>.</p></div>
+    </div>
   </section>
 
   <!-- What this site offers -->
   <section class="lp-wrap lp-section" id="inside">
     <h2 class="lp-h2">What's inside</h2>
-    <p class="lp-sub">Everything you need to prepare, free and in your browser.</p>
+    <p class="lp-sub">A structured, free study kit — all in your browser.</p>
 
     <h3 class="lp-h3">Practice</h3>
     <div class="lp-grid">
@@ -114,27 +155,27 @@
 
     <h3 class="lp-h3">Study materials</h3>
     <div class="lp-grid">
-      <a class="lp-card repo-link" data-path="STUDY-GUIDE.md" href="#">
+      <a class="lp-card repo-link" data-path="STUDY-GUIDE.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/STUDY-GUIDE.md">
         <span class="lp-ic"><svg><use href="#ic-compass"/></svg></span>
         <span><span class="lp-card-title">Study guide</span>
           <span class="lp-card-desc">How to use everything here, plus a two-week plan.</span></span>
       </a>
-      <a class="lp-card repo-link" data-path="study-notes" href="#">
+      <a class="lp-card repo-link" data-path="study-notes" href="https://github.com/rkarmaka/claude-cca-study-kit/tree/main/study-notes">
         <span class="lp-ic"><svg><use href="#ic-layers"/></svg></span>
         <span><span class="lp-card-title">Domain cheatsheets</span>
           <span class="lp-card-desc">Decision-rule notes for all five exam domains.</span></span>
       </a>
-      <a class="lp-card repo-link" data-path="study-notes/scenario-guide.md" href="#">
+      <a class="lp-card repo-link" data-path="study-notes/scenario-guide.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/scenario-guide.md">
         <span class="lp-ic"><svg><use href="#ic-grid"/></svg></span>
         <span><span class="lp-card-title">Scenario guide</span>
           <span class="lp-card-desc">The 6 exam scenarios mapped to domains and patterns.</span></span>
       </a>
-      <a class="lp-card repo-link" data-path="study-notes/glossary.md" href="#">
+      <a class="lp-card repo-link" data-path="study-notes/glossary.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/glossary.md">
         <span class="lp-ic"><svg><use href="#ic-book"/></svg></span>
         <span><span class="lp-card-title">Glossary</span>
-          <span class="lp-card-desc">Every term, flag, path, and API the exam tests.</span></span>
+          <span class="lp-card-desc">Key terms, flags, paths, and APIs from the public exam guide.</span></span>
       </a>
-      <a class="lp-card repo-link" data-path="study-notes/master-trap-sheet.md" href="#">
+      <a class="lp-card repo-link" data-path="study-notes/master-trap-sheet.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/study-notes/master-trap-sheet.md">
         <span class="lp-ic"><svg><use href="#ic-alert"/></svg></span>
         <span><span class="lp-card-title">Master trap sheet</span>
           <span class="lp-card-desc">Every distractor pattern on one page — read it exam morning.</span></span>
@@ -167,12 +208,12 @@
         <span class="r-text"><span class="r-title">Model Context Protocol</span><span class="r-sub">modelcontextprotocol.io</span></span>
         <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
       </a>
-      <a class="lp-resource repo-link" data-path="practice-exam/question-bank.md" href="#">
+      <a class="lp-resource repo-link" data-path="practice-exam/question-bank.md" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/practice-exam/question-bank.md">
         <span class="lp-ic"><svg><use href="#ic-help"/></svg></span>
         <span class="r-text"><span class="r-title">Question bank (220)</span><span class="r-sub">with explanations</span></span>
         <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
       </a>
-      <a class="lp-resource repo-root" href="#">
+      <a class="lp-resource repo-root" href="https://github.com/rkarmaka/claude-cca-study-kit">
         <span class="lp-ic"><svg><use href="#ic-github"/></svg></span>
         <span class="r-text"><span class="r-title">GitHub repository</span><span class="r-sub">source &amp; contributing</span></span>
         <span class="r-ext"><svg><use href="#ic-external"/></svg></span>
@@ -185,12 +226,27 @@
       practice question is original, written in the exam's style from the public exam guide.
     </div>
   </section>
+
+  <!-- About this project -->
+  <section class="lp-wrap lp-section" id="project">
+    <h2 class="lp-h2">About this project</h2>
+    <p class="lp-about-text">Maintained by <a href="https://github.com/rkarmaka" target="_blank" rel="noopener">@rkarmaka</a>
+      and open to contributors. Questions and notes are written from Anthropic's public exam guide and
+      community cheatsheets — original study material, reviewed by hand, with corrections tracked in the
+      open. Spotted an error or an outdated exam detail?
+      <a href="https://github.com/rkarmaka/claude-cca-study-kit/issues/new/choose" target="_blank" rel="noopener">Open an issue</a>
+      or read the <a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">contribution guide</a>.</p>
+    <p class="lp-verified" style="margin-top:1rem">
+      Question bank <strong>v0.1.0</strong> · Updated May 2026 ·
+      <a href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog ↗</a>
+    </p>
+  </section>
 </main>
 
 <footer class="lp-footer">
   <div class="lp-footer-inner">
-    <span>Built by the community · Code <a class="repo-root" href="#">MIT</a>, written materials CC&nbsp;BY&nbsp;4.0</span>
-    <span><a class="repo-root" href="#">GitHub repository →</a></span>
+    <span>Built by the community · Code <a class="repo-root" href="https://github.com/rkarmaka/claude-cca-study-kit/blob/main/LICENSE">MIT</a>, written materials CC&nbsp;BY&nbsp;4.0 · <span id="ver">v0.1.0 · Updated May 2026</span></span>
+    <span><a class="repo-root" href="https://github.com/rkarmaka/claude-cca-study-kit">GitHub repository →</a></span>
   </div>
 </footer>
 
@@ -221,13 +277,17 @@
     if (host.endsWith('.github.io') && parts.length >= 1) {
       base = 'https://github.com/' + host.split('.')[0] + '/' + parts[0];
     }
+    // Links already carry real github.com hrefs (so they work without JS). Only
+    // fill a placeholder, and ensure they open in a new tab.
     document.querySelectorAll('.repo-link').forEach(function (a) {
-      var path = a.getAttribute('data-path');
-      a.href = base ? base + '/blob/main/' + path : '../' + path;
-      if (base) { a.target = "_blank"; a.rel = "noopener"; }
+      var cur = a.getAttribute('href');
+      if (base && (!cur || cur === '#')) a.href = base + '/blob/main/' + a.getAttribute('data-path');
+      a.target = "_blank"; a.rel = "noopener";
     });
     document.querySelectorAll('.repo-root').forEach(function (a) {
-      if (base) { a.href = base; a.target = "_blank"; a.rel = "noopener"; }
+      var cur = a.getAttribute('href');
+      if (base && (!cur || cur === '#')) a.href = base;
+      a.target = "_blank"; a.rel = "noopener";
     });
   })();
 </script>
