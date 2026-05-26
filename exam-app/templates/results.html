@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Results · {{ run.exam_id }}{% endblock %}
+{% block content %}
+
+<section class="results-hero {{ 'pass' if run.score.passed else 'fail' }}">
+  <div class="score-stack">
+    <div class="scaled mono">{{ run.score.scaled }}<span class="of">/1000</span></div>
+    <div class="result-label">{{ 'PASSED' if run.score.passed else 'FAILED' }}</div>
+    <div class="result-meta muted">
+      {{ run.score.correct }}/{{ run.score.total }} correct · {{ run.score.percent }}% · pass at {{ run.pass_threshold }}/1000
+    </div>
+  </div>
+  <div class="actions">
+    <a href="{{ url_for('review', exam_id=run.exam_id) }}" class="btn btn-primary">Review Answers</a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Home</a>
+  </div>
+</section>
+
+<section>
+  <h2>Per-domain breakdown</h2>
+  <table class="domain-table">
+    <thead>
+      <tr><th>Domain</th><th>Score</th><th>Percent</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for d in run.score.by_domain.values() | sort(attribute='id') %}
+        <tr>
+          <td>{{ d.label }}</td>
+          <td class="mono">{{ d.correct }}/{{ d.total }}</td>
+          <td class="mono">{{ d.percent }}%</td>
+          <td><div class="bar"><div class="bar-fill" style="width: {{ d.percent }}%"></div></div></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="meta">
+  <p class="muted">
+    Started {{ run.started_at | dt }} · Submitted {{ run.submitted_at | dt }} · Duration {{ run.duration_seconds | dur }}
+  </p>
+  <p class="muted">
+    Exam ID <code>{{ run.exam_id }}</code> · Saved to <code>exam_runs/{{ run.exam_id }}.json</code>
+  </p>
+</section>
+
+{% endblock %}

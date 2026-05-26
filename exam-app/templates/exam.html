@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Exam · {{ run.exam_id }}{% endblock %}
+{% block content %}
+
+<div class="exam-header">
+  <div>
+    <h1>Practice Exam</h1>
+    <p class="muted">{{ run.questions|length }} questions · {{ run.duration_minutes }} minutes · pass at {{ run.pass_threshold }}/1000</p>
+  </div>
+  <div class="timer-container">
+    <div id="timer" class="timer" data-expires="{{ run.expires_at }}">--:--</div>
+    <div class="muted timer-label">time remaining</div>
+  </div>
+</div>
+
+<form id="exam-form" method="post" action="{{ url_for('submit_exam', exam_id=run.exam_id) }}" novalidate>
+  {% for q in run.questions %}
+    <article class="question-card" id="q-{{ loop.index }}">
+      <header class="q-header">
+        <span class="q-num">Question {{ loop.index }} of {{ run.questions|length }}</span>
+        <span class="q-domain">{{ domain_short[q.domain] }}</span>
+      </header>
+      <div class="q-text">{{ q.question | md }}</div>
+      <fieldset class="q-options">
+        {% for letter in ['A','B','C','D'] %}
+          <label class="option">
+            <input type="radio" name="q_{{ q.id }}" value="{{ letter }}">
+            <span class="option-letter">{{ letter }}</span>
+            <span class="option-text">{{ q.options[letter] | md }}</span>
+          </label>
+        {% endfor %}
+      </fieldset>
+    </article>
+  {% endfor %}
+
+  <div class="exam-footer">
+    <p class="muted">Answer all questions, then submit. Unanswered questions are counted as incorrect.</p>
+    <button type="button" class="btn btn-primary btn-lg" id="submit-btn">Submit Exam</button>
+  </div>
+</form>
+
+<dialog id="confirm-submit" class="confirm-dialog">
+  <h3>Submit exam?</h3>
+  <p id="unanswered-warning" class="muted"></p>
+  <p class="muted">You will not be able to change answers after submitting.</p>
+  <div class="dialog-actions">
+    <button type="button" class="btn btn-secondary" id="cancel-submit">Cancel</button>
+    <button type="button" class="btn btn-primary" id="confirm-submit-btn">Submit</button>
+  </div>
+</dialog>
+
+<dialog id="expired-dialog" class="confirm-dialog">
+  <h3>Time's up</h3>
+  <p class="muted">Submitting your answers now.</p>
+</dialog>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='exam.js') }}"></script>
+{% endblock %}

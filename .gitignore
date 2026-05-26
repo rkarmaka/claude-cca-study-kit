@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+exam-app/.venv/
+
+# Personal / confidential — intentionally never committed (see README)
+# The official exam-guide PDF is Anthropic "Confidential — Need to Know".
+official-docs/
+# Saved exam runs contain personal results; the app recreates this dir.
+exam-app/exam_runs/
+# Any saved exam-platform pages, screenshots, session tokens, account details.
+*.session
+*.token

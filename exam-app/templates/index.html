@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="hero">
+  <h1>Claude Certified Architect<br><span class="hero-sub">Foundations · Practice Exam</span></h1>
+  <p class="muted">
+    {{ total_questions }} questions · {{ duration }} minutes · Pass at {{ pass_threshold }}/1000
+  </p>
+  <form method="post" action="{{ url_for('start_exam') }}" class="start-form">
+    <button type="submit" class="btn btn-primary btn-lg">Start New Exam</button>
+  </form>
+
+  <details class="distribution">
+    <summary>Question distribution</summary>
+    <ul>
+      {% for label, n in distribution %}
+        <li><span>{{ label }}</span><span class="muted">{{ n }} questions</span></li>
+      {% endfor %}
+    </ul>
+  </details>
+</section>
+
+{% if runs %}
+<section>
+  <div class="section-head">
+    <h2>Recent attempts</h2>
+    {% if runs|length > 5 %}
+      <a href="{{ url_for('history') }}" class="muted">See all →</a>
+    {% endif %}
+  </div>
+  <table class="runs-table">
+    <thead>
+      <tr><th>Date</th><th>Score</th><th>Result</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for r in runs[:5] %}
+      <tr>
+        <td>{{ r.started_at | dt }}</td>
+        <td>
+          {% if r.score %}
+            <span class="mono">{{ r.score.scaled }}/1000</span>
+            <span class="muted">· {{ r.score.correct }}/{{ r.score.total }}</span>
+          {% else %}
+            <span class="muted">in progress</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if r.score %}
+            <span class="badge badge-{{ 'pass' if r.score.passed else 'fail' }}">
+              {{ 'PASS' if r.score.passed else 'FAIL' }}
+            </span>
+          {% else %}
+            <span class="badge badge-pending">in&nbsp;progress</span>
+          {% endif %}
+        </td>
+        <td class="right">
+          {% if r.score %}
+            <a href="{{ url_for('results', exam_id=r.exam_id) }}">View</a>
+          {% else %}
+            <a href="{{ url_for('exam', exam_id=r.exam_id) }}">Resume</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+{% endblock %}

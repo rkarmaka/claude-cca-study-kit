@@ -1,0 +1,10 @@
+body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; max-width: 760px; margin: 2em auto; padding: 0 1em; line-height: 1.5; color: #222; }
+h1 { border-bottom: 2px solid #333; padding-bottom: .3em; }
+h2 { color: #2a4365; margin-top: 1.8em; border-bottom: 1px solid #ddd; padding-bottom: .2em; page-break-after: avoid; }
+em { color: #666; font-size: 0.9em; }
+code { background: #f4f4f4; padding: 1px 4px; border-radius: 3px; font-size: 0.9em; font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; }
+strong { color: #1a202c; }
+hr { border: none; border-top: 1px dashed #bbb; margin: 2em 0; }
+li { margin: 0.25em 0; }
+ul { padding-left: 1.4em; }
+@page { size: Letter; margin: 0.75in; }

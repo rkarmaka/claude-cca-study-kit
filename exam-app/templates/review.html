@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Review · {{ run.exam_id }}{% endblock %}
+{% block content %}
+
+<div class="review-header">
+  <div>
+    <h1>Review answers</h1>
+    <p class="muted">
+      {{ run.score.correct }}/{{ run.score.total }} correct · {{ run.score.scaled }}/1000 ·
+      <a href="{{ url_for('results', exam_id=run.exam_id) }}">back to results</a>
+    </p>
+  </div>
+  <div class="review-filter">
+    <button type="button" class="chip chip-active" data-filter="all">All</button>
+    <button type="button" class="chip" data-filter="incorrect">Incorrect</button>
+    <button type="button" class="chip" data-filter="correct">Correct</button>
+    <button type="button" class="chip" data-filter="skipped">Skipped</button>
+  </div>
+</div>
+
+{% for q in run.questions %}
+  {% set ua = run.user_answers.get(q.id|string) %}
+  {% set is_correct = (ua == q.correct) %}
+  {% set state = 'correct' if is_correct else ('incorrect' if ua else 'skipped') %}
+  <article class="review-card {{ state }}" data-state="{{ state }}">
+    <header class="q-header">
+      <span class="q-num">Q{{ loop.index }} · {{ domain_short[q.domain] }}</span>
+      <span class="q-result">
+        {% if is_correct %}✓ Correct
+        {% elif ua %}✗ Incorrect
+        {% else %}— Skipped
+        {% endif %}
+      </span>
+    </header>
+    <div class="q-text">{{ q.question | md }}</div>
+    <ul class="review-options">
+      {% for letter in ['A','B','C','D'] %}
+        <li class="
+          {%- if letter == q.correct %} is-correct{% endif -%}
+          {%- if letter == ua and ua != q.correct %} is-user-wrong{% endif -%}
+        ">
+          <strong>{{ letter }})</strong> {{ q.options[letter] | md }}
+          {% if letter == q.correct %}<span class="tag tag-correct">correct</span>{% endif %}
+          {% if letter == ua and ua != q.correct %}<span class="tag tag-yours">your answer</span>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    <details class="explanation" {% if not is_correct %}open{% endif %}>
+      <summary>Explanation</summary>
+      <p>{{ q.explanation | md }}</p>
+    </details>
+  </article>
+{% endfor %}
+
+{% endblock %}
+{% block scripts %}
+<script>
+  // Filter chips
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.review-card');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('chip-active'));
+      chip.classList.add('chip-active');
+      const filter = chip.dataset.filter;
+      cards.forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.state === filter) ? '' : 'none';
+      });
+    });
+  });
+</script>
+{% endblock %}
